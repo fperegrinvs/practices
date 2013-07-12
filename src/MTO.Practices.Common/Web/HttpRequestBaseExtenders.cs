@@ -7,9 +7,6 @@
 namespace MTO.Practices.Common.Web
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using System.Web;
 
     /// <summary>
@@ -19,6 +16,11 @@ namespace MTO.Practices.Common.Web
     {
         public static bool AcceptsGZip(this HttpRequestBase request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
             var acceptEncoding = request.Headers["Accept-Encoding"];
 
             if (string.IsNullOrEmpty(acceptEncoding))
@@ -32,6 +34,11 @@ namespace MTO.Practices.Common.Web
 
         public static bool AcceptsGZip(this HttpRequest request)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
             var acceptEncoding = request.Headers["Accept-Encoding"];
 
             if (string.IsNullOrEmpty(acceptEncoding))

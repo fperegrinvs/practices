@@ -7,7 +7,7 @@ namespace MTO.Practices.Common
     /// <summary>
     /// DateTimeUtil
     /// </summary>
-    public class DateTimeUtil
+    public static class DateTimeUtil
     {
         public static DateTime GetDateTimeWithWeekDay(int days, WeekDayEnum weekDay)
         {

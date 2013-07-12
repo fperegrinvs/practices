@@ -28,6 +28,11 @@
         /// <returns>array de bytes comprimido</returns>
         public static byte[] CompressGZip(this byte[] raw)
         {
+            if (raw == null)
+            {
+                throw new ArgumentNullException();
+            }
+
             using (var memory = new MemoryStream())
             {
                 using (GZipStream gzip = new GZipStream(memory, CompressionMode.Compress, true))

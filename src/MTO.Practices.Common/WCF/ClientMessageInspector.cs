@@ -1,6 +1,7 @@
 ﻿namespace MTO.Practices.Common.WCF
 {
     using System;
+    using System.Collections.Generic;
     using System.ServiceModel;
     using System.ServiceModel.Channels;
     using System.ServiceModel.Description;
@@ -83,6 +84,11 @@
         /// <param name="request">The message to be sent to the service.</param><param name="channel">The  client object channel.</param>
         public object BeforeSendRequest(ref Message request, IClientChannel channel)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException("request");
+            }
+
             LastRequest = request.ToString();
             LastResponse = string.Empty;
 
@@ -96,6 +102,11 @@
         /// <param name="reply">The message to be transformed into types and handed back to the client application.</param><param name="correlationState">Correlation state data.</param>
         public void AfterReceiveReply(ref Message reply, object correlationState)
         {
+            if (reply == null)
+            {
+                throw new ArgumentNullException("reply");
+            }
+
             if (this.captureResponse)
             {
                 LastResponse = reply.ToString();
@@ -134,6 +145,11 @@
         /// <param name="endpoint">The endpoint that is to be customized.</param><param name="clientRuntime">The client runtime to be customized.</param>
         public void ApplyClientBehavior(ServiceEndpoint endpoint, ClientRuntime clientRuntime)
         {
+            if (clientRuntime == null)
+            {
+                throw new ArgumentNullException("clientRuntime");
+            }
+
             clientRuntime.MessageInspectors.Add(this);
         }
 

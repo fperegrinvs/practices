@@ -10,7 +10,7 @@
         /// <summary>
         /// The UTF-8 BOM
         /// </summary>
-        private static readonly string Utf8Bom = "\u00EF\u00BB\u00BF";
+        private const string Utf8Bom = "\u00EF\u00BB\u00BF";
 
         /// <summary>
         /// Tabela para codificação de caracteres
@@ -70,6 +70,11 @@
         /// </returns>
         public static byte[] FromHexString(string s)
         {
+            if (s == null)
+            {
+                throw new ArgumentNullException("s");
+            }
+
             var chars = s.ToCharArray();
             var u = chars.Length;
             var bytes = new byte[u / 2];
@@ -96,6 +101,11 @@
         /// </returns>
         public static string ToHexString(this byte[] bytes)
         {
+            if (bytes == null)
+            {
+                throw new ArgumentNullException("bytes");
+            }
+
             var u = bytes.Length;
             var chars = new char[u * 2];
             int offset = 0;
@@ -119,6 +129,11 @@
         /// <returns>The UTF-8 string without the BOM</returns>
         public static byte[] RemoveByteOrderMark(this byte[] text)
         {
+            if (text == null)
+            {
+                throw new ArgumentNullException("text");
+            }
+
             if (Utf8Bom[0] == text[0] 
                 && Utf8Bom[1] == text[1] 
                 && Utf8Bom[2] == text[2])

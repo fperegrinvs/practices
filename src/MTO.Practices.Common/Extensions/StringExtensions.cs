@@ -52,6 +52,11 @@
         /// <returns>True if the specified String objects occurs within this string.</returns>
         public static bool Contains(this string source, string value, StringComparison comp)
         {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+
             return source.IndexOf(value, comp) >= 0;
         }
 
@@ -141,6 +146,11 @@
         /// <returns>A string sem as query strings</returns>
         public static string RemoveQueryString(this string url)
         {
+            if (url == null)
+            {
+                throw new ArgumentNullException("url");
+            }
+
             var i = url.IndexOf('?');
             if (i > 0)
             {
@@ -157,6 +167,11 @@
         /// <returns>O caminho sem /  e ~ no início</returns>
         public static string TrimPathStart(this string path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             return path.TrimStart(PathStartChars);
         }
 
@@ -167,6 +182,11 @@
         /// <returns>A string sem / no final</returns>
         public static string TrimPathEnd(this string path)
         {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
             return path.TrimEnd('/');
         }
 

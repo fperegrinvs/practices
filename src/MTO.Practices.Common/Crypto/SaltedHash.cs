@@ -42,7 +42,7 @@
             string salt = correctHash.Substring(0, 64);
             string validHash = correctHash.Substring(64, 64);
             string passHash = Sha256Hex(salt + password);
-            return string.Compare(validHash, passHash) == 0;
+            return string.CompareOrdinal(validHash, passHash) == 0;
         }
 
         /// <summary>

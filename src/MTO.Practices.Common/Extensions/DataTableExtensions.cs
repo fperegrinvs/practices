@@ -1,5 +1,6 @@
 ﻿namespace MTO.Practices.Common.Extensions
 {
+    using System;
     using System.Data;
     using System.Text;
 
@@ -15,7 +16,12 @@
         /// <returns>A string com a html table</returns>
         public static string ToHtml(this DataTable dt)
         {
-            string tab = "\t";
+            if (dt == null)
+            {
+                throw new ArgumentNullException("dt", "Datatable não pode ser nulo.");
+            }
+
+            const string tab = "\t";
 
             StringBuilder sb = new StringBuilder();
 
@@ -57,6 +63,11 @@
         /// <returns>A string com uma html table pra cada DataTable do DataSet</returns>
         public static string ToHtml(this DataSet ds)
         {
+            if (ds == null)
+            {
+                throw new ArgumentNullException("ds", "DataSet não pode ser nulo.");
+            }
+
             var sb = new StringBuilder();
             foreach (DataTable table in ds.Tables)
             {

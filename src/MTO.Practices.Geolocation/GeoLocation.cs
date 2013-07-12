@@ -4,14 +4,14 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-using System;
-using System.Net;
-using System.Web;
-using Subgurim.Controles;
-
 namespace MTO.Practices.Common.GeoLocation
 {
     using MTO.Practices.Common.Debug;
+
+    using System;
+    using System.Web;
+
+    using Subgurim.Controles;
 
     /// <summary>
     /// TODO: Update summary.

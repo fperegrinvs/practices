@@ -8,7 +8,7 @@
     /// <summary>
     /// Classe de métodos auxiliares para trabalhar com enumeradores
     /// </summary>
-    public class EnumHelper
+    public static class EnumHelper
     {
         /// <summary>
         /// Recupera o valor do atributo Description do campo do enum
@@ -30,6 +30,11 @@
         /// <returns>Valor do atributo</returns>
         public static string GetDescription(Type enumType, string name)
         {
+            if (enumType == null)
+            {
+                throw new ArgumentNullException("enumType");
+            }
+
             var field = enumType.GetFields(BindingFlags.Static | BindingFlags.GetField | BindingFlags.Public).First(
                 x => x.GetValue(null).ToString() == name);
             foreach (DescriptionAttribute currAttr in field.GetCustomAttributes(typeof(DescriptionAttribute), true))
@@ -37,7 +42,7 @@
                 return currAttr.Description;
             }
 
-            throw new Exception("Valor do Enum não possui DisplayName: " + name);
+            throw new InvalidEnumArgumentException("Valor do Enum não possui DisplayName: " + name);
         }
     }
 }

@@ -56,6 +56,11 @@
         /// <returns>Verdadeiro se são iguais</returns>
         public bool Equals(RegexRouteConstraint other)
         {
+            if (other == null)
+            {
+                throw new ArgumentNullException("other");
+            }
+
             return other.regex == this.regex;
         }
     }

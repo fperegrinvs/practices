@@ -29,6 +29,11 @@
         /// <returns>Nova coleção com dados da coleção principal e secundária.</returns>
         public static IEnumerable<T> CustomMerge<T>(this IEnumerable<T> first, IEnumerable<T> second, IEqualityComparer<T> comparer, CombineAction<T> combineAction, DeleteAction<T> deleteAction, UpdateAction<T> updateAction, InsertAction<T> insertAction)
         {
+            if (first == null)
+            {
+                throw new ArgumentNullException("first");
+            }
+
             var deleted = first.Except(second, comparer).ToList();
             for (int i = 0; i < deleted.Count(); i++)
             {

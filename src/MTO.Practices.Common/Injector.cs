@@ -6,7 +6,7 @@
     /// Classe reponsável por efetuar injeções de dependência.
     /// Ela é usada ao invés do container unity para facilitar os testes unitários e o isolamento das dependências.
     /// </summary>
-    public class Injector
+    public static class Injector
     {
         /// <summary>
         /// Handler para o método que injeta dependências.

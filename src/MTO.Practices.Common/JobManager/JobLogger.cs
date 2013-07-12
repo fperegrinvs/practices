@@ -59,6 +59,11 @@
         /// </param>
         public void LogError(Exception ex, string storeId = null, string appName = null)
         {
+            if (ex == null)
+            {
+                throw new ArgumentNullException("ex");
+            }
+
             var storeApp = string.Empty;
             if (!string.IsNullOrEmpty(storeId) || !string.IsNullOrEmpty(appName))
             {

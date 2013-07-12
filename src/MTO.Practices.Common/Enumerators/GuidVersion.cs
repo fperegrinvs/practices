@@ -6,6 +6,11 @@
     public enum GuidVersion
     {
         /// <summary>
+        /// Valor indefinido
+        /// </summary>
+        None = 0x00,
+
+        /// <summary>
         /// Conceptually, the original (version 1) generation scheme for UUIDs was to concatenate the UUID version with the MAC address of the computer 
         /// that is generating the UUID, and with the number of 100-nanosecond intervals since the adoption of the Gregorian calendar in the West
         /// </summary>

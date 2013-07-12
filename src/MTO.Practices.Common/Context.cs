@@ -5,7 +5,7 @@
     /// <summary>
     /// Armazena contexto atual da aplicação
     /// </summary>
-    public class Context
+    public static class Context
     {
         /// <summary>
         /// Armazena localmente o contexto para evitar o resolve

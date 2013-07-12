@@ -63,7 +63,7 @@
         {
             if (this.Queues.Any(x => x.Name == jobQueue.Name))
             {
-                throw new Exception("Fila já registrada: " + jobQueue.Name);
+                throw new InvalidOperationException("Fila já registrada: " + jobQueue.Name);
             }
 
             this.Queues.Add(jobQueue);

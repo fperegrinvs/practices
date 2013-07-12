@@ -3,6 +3,8 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.IO;
+    using System.Security.Authentication;
     using System.Web;
     using System.Web.Helpers;
     using System.Web.Security;
@@ -106,7 +108,7 @@
             var identity = HttpContext.Current.User.Identity;
             if (!identity.IsAuthenticated)
             {
-                throw new Exception("Usuário não autenticado.");
+                throw new AuthenticationException("Usuário não autenticado.");
             }
 
             if (identity.Name.Contains("_"))
@@ -114,7 +116,7 @@
                 return identity.Name.Split('_')[1];
             }
 
-            throw new Exception("Contexto de autenticação corrompido.");
+            throw new InvalidCredentialException("Contexto de autenticação corrompido.");
         }
 
         /// <summary>
@@ -126,7 +128,7 @@
             var identity = HttpContext.Current.User.Identity;
             if (!identity.IsAuthenticated)
             {
-                throw new Exception("Usuário não autenticado.");
+                throw new AuthenticationException("Usuário não autenticado.");
             }
 
             Guid guid;
@@ -135,7 +137,7 @@
                 return guid;
             }
 
-            throw new Exception("Contexto de autenticação corrompido.");
+            throw new InvalidCredentialException("Contexto de autenticação corrompido.");
         }
 
         /// <summary>
@@ -238,7 +240,7 @@
             {
                 // Em caso de erro na decodificação do cookie de atividades permitidas
                 // efetuamos logoff para limpar tanto ele quanto o cookie de login
-                Logger.Instance.LogError(new Exception("Erro ao decodificar cookie de atividades permitidas. Expiração?", ex));
+                Logger.Instance.LogError(new InvalidCredentialException("Erro ao decodificar cookie de atividades permitidas. Expiração?", ex));
                 this.LogOff();
                 return false;
             }
