@@ -2,17 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Web.Script.Serialization;
-
-    using Antlr3.ST;
-
-    using MTO.Practices.Common.Templating;
-    using MTO.Practices.Common.Templating.AttributeRenderer;
-    using MTO.Practices.Common.Templating.Models;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using MTO.Practices.Common.Templating;
+    using MTO.Practices.Common.Templating.Models;
 
     /// <summary>
     /// Testes do TemplateBuilder

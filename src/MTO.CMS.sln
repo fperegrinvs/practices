@@ -5,8 +5,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.Common", "MTO
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.Common.Tests", "MTO.Practices.Common.Tests\MTO.Practices.Common.Tests.csproj", "{706B4F56-D63A-445A-829A-6D89454F8F60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.MaxMindExportDataBase", "MTO.Practices.MaxMindExportDataBase\MTO.Practices.MaxMindExportDataBase.csproj", "{6E3C55C1-A859-43EA-ACC6-960F26D9798D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.Cache", "MTO.Practices.Cache\MTO.Practices.Cache.csproj", "{A82EC1A2-F7C4-4B51-8BC1-BFFEA67E363D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.Config", "MTO.Practices.Config\MTO.Practices.Config.csproj", "{548AAB12-5F75-48E9-9323-1B2FC900186A}"
@@ -33,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.Web.Mvc", "MTO.Practices.Web.Mvc\MTO.Practices.Web.Mvc.csproj", "{496E280B-840D-42A7-8E88-BC8B94FD2D9F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTO.Practices.Zip", "MTO.Practices.Zip\MTO.Practices.Zip.csproj", "{068FF586-D40C-4A54-A283-C16CA3996F37}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7DD8AF68-0C83-4F25-BF2E-B579792754F4}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
@@ -79,20 +79,6 @@ Global
 		{706B4F56-D63A-445A-829A-6D89454F8F60}.TraceRelease|Mixed Platforms.ActiveCfg = TraceRelease|Any CPU
 		{706B4F56-D63A-445A-829A-6D89454F8F60}.TraceRelease|Mixed Platforms.Build.0 = TraceRelease|Any CPU
 		{706B4F56-D63A-445A-829A-6D89454F8F60}.TraceRelease|x86.ActiveCfg = TraceRelease|Any CPU
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Debug|Mixed Platforms.Build.0 = Debug|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Debug|x86.ActiveCfg = Debug|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Debug|x86.Build.0 = Debug|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Release|Any CPU.ActiveCfg = Release|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Release|Mixed Platforms.Build.0 = Release|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Release|x86.ActiveCfg = Release|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.Release|x86.Build.0 = Release|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.TraceRelease|Any CPU.ActiveCfg = TraceRelease|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.TraceRelease|Mixed Platforms.ActiveCfg = TraceRelease|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.TraceRelease|Mixed Platforms.Build.0 = TraceRelease|x86
-		{6E3C55C1-A859-43EA-ACC6-960F26D9798D}.TraceRelease|x86.ActiveCfg = TraceRelease|x86
 		{A82EC1A2-F7C4-4B51-8BC1-BFFEA67E363D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A82EC1A2-F7C4-4B51-8BC1-BFFEA67E363D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A82EC1A2-F7C4-4B51-8BC1-BFFEA67E363D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -276,5 +262,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{706B4F56-D63A-445A-829A-6D89454F8F60} = {7DD8AF68-0C83-4F25-BF2E-B579792754F4}
 	EndGlobalSection
 EndGlobal
