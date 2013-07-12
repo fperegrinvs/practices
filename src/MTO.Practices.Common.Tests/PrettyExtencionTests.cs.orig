@@ -1,0 +1,41 @@
+﻿using System;
+using System.Text;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using MTO.Practices.Common.Extensions;
+
+namespace MTO.Practices.Common.Tests
+{
+    [TestClass]
+    public class PrettyExtencionTests
+    {
+        [TestMethod]
+        public void DateTime_Com_Trinta_Segundos_TEST()
+        {
+            DateTime d = DateTime.Now.AddSeconds(-30);
+            Assert.AreEqual("agora mesmo", d.ToPrettyString());
+        }
+
+        [TestMethod]
+        public void DateTime_Com_CentoECinquenta_Segundos_TEST()
+        {
+            DateTime d = DateTime.Now.AddSeconds(-150);
+            Assert.AreEqual("2 minutos atrás", d.ToPrettyString());
+        }
+
+        [TestMethod]
+        public void TimeSpan_Com_Trinta_Segundos_TEST()
+        {
+            TimeSpan t = new TimeSpan(0, 0, 30);
+            Assert.AreEqual("agora mesmo", t.ToPrettyString());
+        }
+
+        [TestMethod]
+        public void TimeSpan_Com_CentoECinquenta_Segundos_TEST()
+        {
+            TimeSpan t = new TimeSpan(0, 0, 150);
+            Assert.AreEqual("2 minutos", t.ToPrettyString());
+        }
+    }
+}
