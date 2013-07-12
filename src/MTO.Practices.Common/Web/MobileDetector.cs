@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace MTO.Practices.Common.Web
+﻿namespace MTO.Practices.Common.Web
 {
     /// <summary>
     /// Detector de UserAgent Mobile baseado no Hands.dll
@@ -57,32 +52,6 @@ namespace MTO.Practices.Common.Web
             }
 
             return false;
-        }
-
-        private static class Conversions
-        {
-            public static bool ToBoolean(bool boolean)
-            {
-                return boolean;
-            }
-        }
-
-        private static class Operators
-        {
-            public static bool AndObject(bool item1, bool item2)
-            {
-                return item1 && item2;
-            }
-
-            public static bool OrObject(bool item1, bool item2)
-            {
-                return item1 || item2;
-            }
-
-            public static bool NotObject(bool obj)
-            {
-                return !obj;
-            }
         }
     }
 }

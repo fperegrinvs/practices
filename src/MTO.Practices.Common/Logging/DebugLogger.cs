@@ -5,8 +5,6 @@
 
     using MTO.Practices.Common.Extensions;
 
-    using Microsoft.Practices.ObjectBuilder2;
-
     /// <summary>
     /// Implementa mecanismo de log de para debugging.
     /// </summary>
@@ -56,12 +54,18 @@
             // Encadeamento
             if (threadChain != null)
             {
-                threadChain.ForEach(x => x.LogError(ex, storeId, appName));
+                foreach (var x in threadChain)
+                {
+                    x.LogError(ex, storeId, appName);
+                }
             }
 
             if (staticChain != null)
             {
-                staticChain.ForEach(x => x.LogError(ex, storeId, appName));
+                foreach (var x in staticChain)
+                {
+                    x.LogError(ex, storeId, appName);
+                }
             }
 
             System.Diagnostics.Debug.WriteLine("--------------------------------------------");
@@ -80,12 +84,18 @@
             // Encadeamento
             if (threadChain != null)
             {
-                threadChain.ForEach(x => x.LogEvent(@event, detail, storeId, appName));
+                foreach (var x in threadChain)
+                {
+                    x.LogEvent(@event, detail, storeId, appName);
+                }
             }
 
             if (staticChain != null)
             {
-                staticChain.ForEach(x => x.LogEvent(@event, detail, storeId, appName));
+                foreach (var x in staticChain)
+                {
+                    x.LogEvent(@event, detail, storeId, appName);
+                }
             }
 
             System.Diagnostics.Debug.WriteLine("--------------------------------------------");

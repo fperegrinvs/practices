@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Web;
+﻿using System.Web;
 
 namespace MTO.Practices.Common.Extensions
 {
@@ -10,7 +6,7 @@ namespace MTO.Practices.Common.Extensions
     {
         public static bool HasFile(this HttpPostedFileBase file)
         {
-            return (file != null && file.ContentLength > 0) ? true : false;
+            return (file != null && file.ContentLength > 0);
         }
     }
 }
