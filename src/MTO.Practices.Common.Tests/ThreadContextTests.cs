@@ -1,12 +1,15 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-
-namespace MTO.Practices.Common.Tests
+﻿namespace MTO.Practices.Common.Tests
 {
+    using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.IO;
     using System.Runtime.Remoting.Messaging;
     using System.Threading;
     using System.Threading.Tasks;
+
+    using Microsoft.VisualStudio.TestTools.UnitTesting;
 
     [TestClass]
     public class ThreadContextTests
@@ -28,7 +31,43 @@ namespace MTO.Practices.Common.Tests
             Assert.AreEqual(guid, tc.Get<Guid>("b"));
         }
 
-        /// <summary>
+        [TestMethod]
+        public void LeakTest()
+        {
+            int workerThreads, portsThreads;
+            ThreadPool.GetMaxThreads(out workerThreads, out portsThreads);
+            ThreadPool.SetMaxThreads(5, 5);
+
+            for (var i  = 0; i < 10000; i++)
+            {
+                var t = new Thread(CheckContext);
+                var c = new ThreadContext();
+                c.Set("c", "a");
+                t.Start();
+                t.Join();
+            }
+
+            ThreadPool.SetMaxThreads(workerThreads, portsThreads);
+            Assert.IsTrue(true);
+        }
+
+        private static void CheckContext()
+        {
+            var t = new ThreadContext();
+            var result = t.Get<string>("c");
+            if (!string.IsNullOrEmpty(result))
+            {
+                throw new InvalidDataException();
+            }
+
+            t.Set("c", "a");
+            if (t.Get<string>("c") != "a")
+            {
+                throw new InvalidDataException();
+            }
+        }
+
+            /// <summary>
         /// Garante que ThreadContext não compartilha valores entre threads do ThreadPool
         /// </summary>
         [TestMethod]
@@ -41,24 +80,24 @@ namespace MTO.Practices.Common.Tests
 
             var action = new Action(
                 () =>
+                {
+                    var tk = Thread.CurrentThread.ManagedThreadId;
+                    DateTime? now = DateTime.Now;
+
+                    Assert.IsFalse(tc.Get<DateTime?>(k).HasValue);
+
+                    if (!tc.Get<DateTime?>(k).HasValue)
                     {
-                        var tk = Thread.CurrentThread.ManagedThreadId;
-                        DateTime? now = DateTime.Now;
+                        tc.Set(k, now);
 
-                        Assert.IsFalse(tc.Get<DateTime?>(k).HasValue);
-                        
-                        if (!tc.Get<DateTime?>(k).HasValue)
+                        if (!threadTimes.ContainsKey(tk))
                         {
-                            tc.Set(k, now);
-                            
-                            if (!threadTimes.ContainsKey(tk))
-                            {
-                                threadTimes[tk] = now.Value;
-                            }
+                            threadTimes[tk] = now.Value;
                         }
+                    }
 
-                        Assert.AreEqual(now.Value.Ticks, tc.Get<DateTime?>(k).Value.Ticks);
-                    });
+                    Assert.AreEqual(now.Value.Ticks, tc.Get<DateTime?>(k).Value.Ticks);
+                });
 
             var tasks = new List<Task>();
 
@@ -68,7 +107,7 @@ namespace MTO.Practices.Common.Tests
             }
 
             Task.WaitAll(tasks.ToArray());
-            
+
             Assert.IsTrue(true);
         }
 

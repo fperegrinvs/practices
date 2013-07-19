@@ -1,8 +1,11 @@
 ﻿namespace MTO.Practices.Common
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Runtime.Remoting.Messaging;
     using System.Web;
+
+    using MTO.Practices.Common.Interfaces;
 
     /// <summary>
     /// Repositório de objetos do contexto da Thread
@@ -16,6 +19,22 @@
         public IContext NewInstance()
         {
             return new ThreadContext();
+        }
+
+        /// <summary>
+        /// Credenciais da thread atual
+        /// </summary>
+        public ConcurrentDictionary<string, ICredential> Credentials
+        {
+            get
+            {
+               return this.Get<ConcurrentDictionary<string, ICredential>>("Credentials") ?? new ConcurrentDictionary<string, ICredential>();
+            }
+            
+            set
+            {
+                this.Set("Credentials", value);
+            }
         }
 
         /// <summary>
@@ -51,11 +70,14 @@
         /// <param name="userId"> The user Id. </param>
         /// <param name="userName"> The user Name. </param>
         /// <param name="activities"> The activities. </param>
-        public void SetAuthenticated(Guid userId, string userName, string activities)
+        /// <param name="userProfile"> Perfil do usuário. </param>
+        /// <typeparam name="U"> Tipo de identificador usado para o usuário </typeparam>
+        public void SetAuthenticated<U>(U userId, string userName, string activities, string userProfile = null)
         {
             this.Set("UserId", userId);
             this.Set("UserName", userName);
             this.Set("Activities", activities);
+            this.Set("UserProfile", userProfile);
         }
 
         /// <summary>

@@ -1,15 +1,18 @@
-﻿namespace MTO.Practices.Common
+﻿namespace MTO.Practices.Common.Web
 {
     using System;
     using System.Collections;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
-    using System.IO;
     using System.Security.Authentication;
     using System.Web;
     using System.Web.Helpers;
     using System.Web.Security;
 
     using MTO.Practices.Common.Crypto;
+    using MTO.Practices.Common.Interfaces;
+
+    using IUserStore = MTO.Practices.Common.IUserStore;
 
     /// <summary>
     /// Gerencia o contexto através de Requests
@@ -30,6 +33,22 @@
         /// Repositório de verificação de existência e habilitação de usuários
         /// </summary>
         private IUserStore userStore;
+
+        /// <summary>
+        /// Credenciais da thread atual
+        /// </summary>
+        public ConcurrentDictionary<string, ICredential> Credentials
+        {
+            get
+            {
+                return this.Get<ConcurrentDictionary<string, ICredential>>("Credentials") ?? new ConcurrentDictionary<string, ICredential>();
+            }
+
+            set
+            {
+                this.Set("Credentials", value);
+            }
+        }
 
         /// <summary>
         /// Repositório de verificação de existência e habilitação de usuários
@@ -146,13 +165,15 @@
         /// <param name="userId"> The user Id. </param>
         /// <param name="userName"> The user Name. </param>
         /// <param name="activities"> The activities. </param>
-        public void SetAuthenticated(Guid userId, string userName, string activities)
+        /// <param name="userProfile"> Perfil do usuário. </param>
+        /// <typeparam name="TU"> Tipo de identificador usado para o usuário </typeparam>
+        public void SetAuthenticated<TU>(TU userId, string userName, string activities, string userProfile = null)
         {
             const int CookieExpiration = 8;
 
             // Usar com [AuthorizeActivity(new[] { ControllerActivityEnum.ActivityName })] na ação do controller.
             var authTicket = new FormsAuthenticationTicket(
-                userId + "_" + userName, // user name
+                userId + "_" + userProfile + "_" + userName, // user name
                 true, // is persistent?
                 CookieExpiration * 60); // timeout in minutes
 
@@ -162,12 +183,14 @@
             HttpContext.Current.Response.Cookies.Add(authCookie);
 
             // Criamos o cookie de atividades
-            var cookie = new HttpCookie(
-                ActivityCookieName, SimpleCrypto.EncryptString(activities, ActivityCookieSecret));
+            if (!string.IsNullOrWhiteSpace(activities))
+            {
+                var cookie = new HttpCookie(
+                    ActivityCookieName, SimpleCrypto.EncryptString(activities, ActivityCookieSecret));
 
-            cookie.Expires = DateTime.Now.AddHours(CookieExpiration);
-
-            HttpContext.Current.Response.Cookies.Add(cookie);
+                cookie.Expires = DateTime.Now.AddHours(CookieExpiration);
+                HttpContext.Current.Response.Cookies.Add(cookie);
+            }
         }
 
         /// <summary>
@@ -240,7 +263,7 @@
             {
                 // Em caso de erro na decodificação do cookie de atividades permitidas
                 // efetuamos logoff para limpar tanto ele quanto o cookie de login
-                Logger.Instance.LogError(new InvalidCredentialException("Erro ao decodificar cookie de atividades permitidas. Expiração?", ex));
+                Logger.Instance.LogException(new InvalidCredentialException("Erro ao decodificar cookie de atividades permitidas. Expiração?", ex));
                 this.LogOff();
                 return false;
             }

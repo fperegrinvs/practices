@@ -1,17 +1,16 @@
-﻿namespace MTO.Practices.Common
+﻿namespace MTO.Practices.Logging.Elmah
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
+    using System.Linq;
+    using System.Text;
 
-    using Elmah;
+    using global::Elmah;
 
-    using MTO.Practices.Common.Entity;
+    using MTO.Practices.Common.Enumerators;
+    using MTO.Practices.Common.Exceptions;
     using MTO.Practices.Common.Extensions;
-
-    using Microsoft.Practices.ObjectBuilder2;
-
-    using OneToOne.Practices.Log;
+    using MTO.Practices.Common.Logging;
 
     /// <summary>
     /// Imnplementa mecanismo de log de erros.
@@ -24,7 +23,7 @@
         private static IList<ILogger> staticChain;
 
         /// <summary>
-        /// Cadeia de listeners globais
+        /// Cadeia de listeners da thread
         /// </summary>
         [ThreadStatic]
         private static IList<ILogger> threadChain;
@@ -32,7 +31,7 @@
         /// <summary>
         /// variavel interna usada se comunicar com o elmah
         /// </summary>
-        private ErrorLog elmah;
+        private readonly ErrorLog elmah;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ElmahLogger"/> class.
@@ -53,10 +52,17 @@
         }
 
         /// <summary>
+        /// Indica se o logger está encadeado a outro logger
+        /// Quando um log está encadeado a outro, ele sempre vai ser disparado como efeito colateral do logger principal
+        /// Tal hierarquia é importante para evitar loops infinitos
+        /// </summary>
+        public bool IsChild { get; set; }
+
+        /// <summary>
         /// Define o nome da aplicação
         /// </summary>
-        public string ApplicationName 
-        { 
+        public string ApplicationName
+        {
             get
             {
                 if (this.elmah != null)
@@ -66,7 +72,7 @@
 
                 return null;
             }
-            
+
             set
             {
                 if (this.elmah != null)
@@ -104,72 +110,136 @@
         /// <param name="appName">
         /// The app Name.
         /// </param>
-        public void LogError(Exception ex, string storeId = null, string appName = null)
+        /// <param name="logType">
+        /// The log Type.
+        /// </param>
+        public void LogException(Exception ex, string storeId = null, string appName = null, LogTypeEnum logType = LogTypeEnum.Error)
         {
             // Encadeamento
-            if (threadChain != null)
+            if (!this.IsChild && threadChain != null)
             {
-                threadChain.ForEach(x => x.LogError(ex, storeId, appName));
+                foreach (var childLogger in threadChain)
+                {
+                    childLogger.LogException(ex, storeId, appName, logType);
+                }
             }
 
-            if (staticChain != null)
+            if (!this.IsChild && staticChain != null)
             {
-                staticChain.ForEach(x => x.LogError(ex, storeId, appName));
+                foreach (var childLogger in staticChain)
+                {
+                    childLogger.LogException(ex, storeId, appName, logType);
+                }
             }
 
-            var error = new Error(ex, HttpContext.Current);
+            this.elmah.Log(new Error(ex));
+        }
 
-            if (!string.IsNullOrEmpty(appName))
+        /// <summary>
+        /// Registra listas de exceptions em um único pacote
+        /// </summary>
+        /// <param name="ex">
+        /// Lista de exceptions
+        /// </param>
+        /// <param name="storeId">
+        /// Identificador do cliente
+        /// </param>
+        /// <param name="appName">
+        /// The app Name.
+        /// </param>
+        public void LogException(List<Exception> ex, string storeId = null, string appName = null)
+        {
+            var sb = new StringBuilder(ex.Count);
+            foreach (var error in ex.Select(exception => new Error(exception)))
             {
-                error.ApplicationName = appName;
+                sb.AppendLine(ErrorJson.EncodeString(error));
             }
 
-            using (var ts = BatchTransaction.Supress())
-            {
-                this.elmah.Log(error);
-
-                ts.Complete();
-            }
+            var aggregateException = new EventException("Erros Agregados", sb.ToString(), storeId, appName);
+            this.LogException(aggregateException, storeId, appName);
         }
 
         /// <summary>
         /// Registra exception que ocorreu no sistema.
         /// </summary>
-        /// <param name="event"> Evento do sistema </param>
-        /// <param name="detail">Detalhamento do evento</param>
-        /// <param name="storeId"> Identificador do cliente </param>
-        /// <param name="appName"> The app Name. </param>
-        public void LogEvent(string @event, string detail, string storeId = null, string appName = null)
+        /// <param name="err">
+        /// Exception do sistema.
+        /// </param>
+        /// <param name="storeId">
+        /// Identificador do cliente
+        /// </param>
+        /// <param name="appName">
+        /// The app Name.
+        /// </param>
+        /// <param name="logType">
+        /// The log Type.
+        /// </param>
+        public void LogEvent(string err, string storeId = null, string appName = null, string details = null, LogTypeEnum logType = LogTypeEnum.Error)
         {
             // Encadeamento
-            if (threadChain != null)
+            if (!this.IsChild && threadChain != null)
             {
-                threadChain.ForEach(x => x.LogEvent(@event, detail, storeId, appName));
+                foreach (var childLogger in threadChain)
+                {
+                    childLogger.LogEvent(err, storeId, appName, details, logType);
+                }
             }
 
-            if (staticChain != null)
+            if (!this.IsChild && staticChain != null)
             {
-                staticChain.ForEach(x => x.LogEvent(@event, detail, storeId, appName));
+                foreach (var childLogger in staticChain)
+                {
+                    childLogger.LogEvent(err, storeId, appName, details, logType);
+                }
             }
 
-            var error = new Error(new EventException(@event, null, storeId, appName), HttpContext.Current);
-
-            if (!string.IsNullOrEmpty(detail))
+            Error error = null;
+            if (!string.IsNullOrEmpty(err) && err.StartsWith("<error"))
             {
-                error.Detail = detail;
+                try
+                {
+                    error = ErrorXml.DecodeString(err);
+                }
+                catch (Exception)
+                {
+                }
             }
 
-            if (!string.IsNullOrEmpty(appName))
+            if (error == null)
             {
-                error.ApplicationName = appName;
+                error = new Error(new EventException(err, details, storeId, appName));
             }
 
-            using (var ts = BatchTransaction.Supress())
-            {
-                this.elmah.Log(error);
+            this.elmah.Log(error);
+        }
 
-                ts.Complete();
+        /// <summary>
+        /// Registra um evento
+        /// </summary>
+        /// <param name="eventVO">
+        /// The event VO.
+        /// </param>
+        public void LogEvent(EventVO eventVO)
+        {
+            // Encadeamento
+            if (!this.IsChild && threadChain != null)
+            {
+                foreach (var childLogger in threadChain)
+                {
+                    childLogger.LogEvent(eventVO);
+                }
             }
+
+            if (!this.IsChild && staticChain != null)
+            {
+                foreach (var childLogger in staticChain)
+                {
+                    childLogger.LogEvent(eventVO);
+                }
+            }
+
+            var exception = new EventException(eventVO);
+            this.elmah.Log(new Error(exception));
         }
 
         /// <summary>
@@ -182,10 +252,12 @@
             if (threadOnly)
             {
                 threadChain = threadChain.AddOrCreate(listener);
+                listener.IsChild = true;
             }
             else
             {
                 staticChain = staticChain.AddOrCreate(listener);
+                listener.IsChild = true;
             }
         }
 

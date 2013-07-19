@@ -95,7 +95,7 @@ namespace MTO.Practices.Common.GeoLocation
                 }
                 catch (Exception ex)
                 {
-                    Logger.Instance.LogError(ex);
+                    Logger.Instance.LogException(ex);
                     DebugTracer.Log("Erro ao recuperar localização", "ReturnLocation");
                     location = null;
                 }

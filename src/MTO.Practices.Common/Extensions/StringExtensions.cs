@@ -1,7 +1,5 @@
 ﻿namespace System
 {
-    using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -223,6 +221,25 @@
         }
 
         /// <summary>
+        /// Converte uma string para um array de bytes
+        /// </summary>
+        /// <param name="s">
+        /// String a ser convertida
+        /// </param>
+        /// <returns>
+        /// Array de bytes do resultado
+        /// </returns>
+        public static byte[] ToBytes(this string s)
+        {
+            if (string.IsNullOrEmpty(s))
+            {
+                return new byte[0];
+            }
+
+            return Encoding.UTF8.GetBytes(s);
+        }
+
+        /// <summary>
         /// Returns a new string in which all the occurrences of the specified substring are replaced with the specified replacement string.
         /// Source: http://www.codeproject.com/KB/string/fastestcscaseinsstringrep.aspx
         /// </summary>
@@ -243,7 +260,6 @@
             {
                 return original;
             }
-
 
             int posCurrent = 0;
             int lenPattern = pattern.Length;

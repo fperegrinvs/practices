@@ -3,6 +3,9 @@
     using System;
     using System.Collections.Generic;
 
+    using MTO.Practices.Common.Enumerators;
+    using MTO.Practices.Common.Logging;
+
     /// <summary>
     /// Loga eventos e erros durante a execução de um job
     /// </summary>
@@ -23,6 +26,13 @@
 
             this.Log = log;
         }
+
+        /// <summary>
+        /// Indica se o logger está encadeado a outro logger
+        /// Quando um log está encadeado a outro, ele sempre vai ser disparado como efeito colateral do logger principal
+        /// Tal hierarquia é importante para evitar loops infinitos
+        /// </summary>
+        public bool IsChild { get; set; }
 
         /// <summary>
         /// Define o nome da aplicação
@@ -57,7 +67,10 @@
         /// <param name="appName">
         /// The app Name.
         /// </param>
-        public void LogError(Exception ex, string storeId = null, string appName = null)
+        /// <param name="logType">
+        /// The log Type.
+        /// </param>
+        public void LogException(Exception ex, string storeId = null, string appName = null, LogTypeEnum logType = LogTypeEnum.Error)
         {
             if (ex == null)
             {
@@ -74,13 +87,41 @@
         }
 
         /// <summary>
+        /// Registra listas de exceptions em um único pacote
+        /// </summary>
+        /// <param name="ex">
+        /// Lista de exceptions
+        /// </param>
+        /// <param name="storeId">
+        /// Identificador do cliente
+        /// </param>
+        /// <param name="appName">
+        /// The app Name.
+        /// </param>
+        public void LogException(List<Exception> ex, string storeId = null, string appName = null)
+        {
+            foreach (var e in ex)
+            {
+                this.LogException(e, storeId, appName);
+            }
+        }
+
+        /// <summary>
         /// Registra exception que ocorreu no sistema.
         /// </summary>
-        /// <param name="event"> Evento do sistema </param>
-        /// <param name="detail">Detalhamento do evento</param>
-        /// <param name="storeId"> Identificador do cliente </param>
-        /// <param name="appName"> The app Name. </param>
-        public void LogEvent(string @event, string detail = null, string storeId = null, string appName = null)
+        /// <param name="title">
+        /// Título da problema/exception
+        /// </param>
+        /// <param name="storeId">
+        /// Identificador do cliente
+        /// </param>
+        /// <param name="appName">
+        /// The app Name.
+        /// </param>
+        /// <param name="logType">
+        /// The log Type.
+        /// </param>
+        public void LogEvent(string title, string storeId = null, string appName = null, string details = null, LogTypeEnum logType = LogTypeEnum.Error)
         {
             var storeApp = string.Empty;
             if (!string.IsNullOrEmpty(storeId) || !string.IsNullOrEmpty(appName))
@@ -88,7 +129,24 @@
                 storeApp = string.Format("({0}/{1})", storeId ?? string.Empty, appName ?? string.Empty);
             }
 
-            this.Log.Add(string.Format("<b>[{0}]</b> - {1} {4}- {2}<br/>{3}", DateTime.Now.ToShortTimeString(), "Evento:", @event, detail, storeApp));
+            this.Log.Add(string.Format("<b>[{0}]</b> - {1} {4}- {2}<br/>{3}", DateTime.Now.ToShortTimeString(), "Evento:",  title, details, storeApp));
+        }
+
+        /// <summary>
+        /// Registra um evento
+        /// </summary>
+        /// <param name="eventVO">
+        /// The event VO.
+        /// </param>
+        public void LogEvent(EventVO eventVO)
+        {
+            var storeApp = string.Empty;
+            if (!string.IsNullOrEmpty(eventVO.StoreId) || !string.IsNullOrEmpty(eventVO.AppName))
+            {
+                storeApp = string.Format("({0}/{1})", eventVO.AppName ?? string.Empty, eventVO.AppName ?? string.Empty);
+            }
+
+            this.Log.Add(string.Format("<b>[{0}]</b> - {1} {4}- {2}<br/>{3}", DateTime.Now.ToShortTimeString(), "Evento:", eventVO.Title, eventVO.Details, storeApp));
         }
 
         /// <summary>

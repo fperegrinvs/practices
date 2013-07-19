@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web.Http;
     using System.Web.Mvc;
 
     using MTO.Tools.CreatePracticesAssembly.Models;
@@ -14,10 +13,10 @@
         {
             var pacotes = new List<Pacote>
                 {
-                    new Pacote { Id = "cache", Name = "Cache" },
+                    new Pacote { Id = "cacheCouchbase", Name = "Cache.Couchbase" },
                     new Pacote { Id = "common", Name = "Common" },
+                    new Pacote { Id = "commonFunq", Name = "Common.Funq" },
                     new Pacote { Id = "commonUnity", Name = "Common.Unity" },
-                    new Pacote { Id = "config", Name = "Config" },
                     new Pacote { Id = "entity", Name = "Entity" },
                     new Pacote { Id = "excel", Name = "Excel" },
                     new Pacote { Id = "geolocation", Name = "Geolocation" },

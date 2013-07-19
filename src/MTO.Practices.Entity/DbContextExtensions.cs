@@ -63,7 +63,7 @@
             }
             catch (Exception ex)
             {
-                Logger.Instance.LogError(ex);
+                Logger.Instance.LogException(ex);
                 throw;
             }
         }

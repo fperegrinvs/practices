@@ -1,8 +1,9 @@
-﻿namespace MTO.Practices.Common
+﻿namespace MTO.Practices.Common.Logging
 {
     using System;
     using System.Collections.Generic;
 
+    using MTO.Practices.Common.Enumerators;
     using MTO.Practices.Common.Extensions;
 
     /// <summary>
@@ -20,6 +21,13 @@
         /// </summary>
         [ThreadStatic]
         private static IList<ILogger> threadChain;
+
+        /// <summary>
+        /// Indica se o logger está encadeado a outro logger
+        /// Quando um log está encadeado a outro, ele sempre vai ser disparado como efeito colateral do logger principal
+        /// Tal hierarquia é importante para evitar loops infinitos
+        /// </summary>
+        public bool IsChild { get; set; }
 
         /// <summary>
         /// Define o nome da aplicação
@@ -49,14 +57,14 @@
         /// <param name="appName">
         /// The app Name.
         /// </param>
-        public void LogError(Exception ex, string storeId = null, string appName = null)
+        public void LogException(Exception ex, string storeId = null, string appName = null, LogTypeEnum logType = LogTypeEnum.Error)
         {
             // Encadeamento
             if (threadChain != null)
             {
                 foreach (var x in threadChain)
                 {
-                    x.LogError(ex, storeId, appName);
+                    x.LogException(ex, storeId, appName);
                 }
             }
 
@@ -64,12 +72,32 @@
             {
                 foreach (var x in staticChain)
                 {
-                    x.LogError(ex, storeId, appName);
+                    x.LogException(ex, storeId, appName);
                 }
             }
 
             System.Diagnostics.Debug.WriteLine("--------------------------------------------");
             System.Diagnostics.Debug.WriteLine("[{0}] Exception: \r\n{1}", DateTime.Now, ex);
+        }
+
+        /// <summary>
+        /// Registra listas de exceptions em um único pacote
+        /// </summary>
+        /// <param name="ex">
+        /// Lista de exceptions
+        /// </param>
+        /// <param name="storeId">
+        /// Identificador do cliente
+        /// </param>
+        /// <param name="appName">
+        /// The app Name.
+        /// </param>
+        public void LogException(List<Exception> ex, string storeId = null, string appName = null)
+        {
+            foreach (var exception in ex)
+            {
+                this.LogException(exception, storeId, appName);
+            }
         }
 
         /// <summary>
@@ -79,7 +107,7 @@
         /// <param name="detail">Detalhamento do evento</param>
         /// <param name="storeId"> Identificador do cliente </param>
         /// <param name="appName"> The app Name. </param>
-        public void LogEvent(string @event, string detail = null, string storeId = null, string appName = null)
+        public void LogEvent(string @event, string detail = null, string storeId = null, string appName = null, LogTypeEnum logType = LogTypeEnum.Error)
         {
             // Encadeamento
             if (threadChain != null)
@@ -100,6 +128,17 @@
 
             System.Diagnostics.Debug.WriteLine("--------------------------------------------");
             System.Diagnostics.Debug.WriteLine("[{0}] Event: {1}\r\nDetails: {2}", DateTime.Now, @event, detail);
+        }
+
+        /// <summary>
+        /// Registra um evento
+        /// </summary>
+        /// <param name="eventVO">
+        /// The event VO.
+        /// </param>
+        public void LogEvent(EventVO eventVO)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

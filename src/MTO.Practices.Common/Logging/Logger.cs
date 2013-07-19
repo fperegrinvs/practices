@@ -1,5 +1,7 @@
 ﻿namespace MTO.Practices.Common
 {
+    using MTO.Practices.Common.Logging;
+
     /// <summary>
     /// Classe helper usada para fazer DI do logger.
     /// </summary>

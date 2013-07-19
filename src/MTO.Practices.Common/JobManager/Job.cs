@@ -145,7 +145,7 @@
                 catch (Exception ex)
                 {
                     this.Error = ex;
-                    Logger.Instance.LogError(new Exception("Erro ao rodar job " + this.Id, ex));
+                    Logger.Instance.LogException(new Exception("Erro ao rodar job " + this.Id, ex));
                 }
                 finally
                 {
@@ -184,7 +184,7 @@
                 catch (Exception ex)
                 {
                     this.Error = ex;
-                    Logger.Instance.LogError(new Exception("Erro ao rodar job " + this.Id, ex));
+                    Logger.Instance.LogException(new Exception("Erro ao rodar job " + this.Id, ex));
                 }
                 finally
                 {

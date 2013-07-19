@@ -134,9 +134,9 @@
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MTO.Practices.Cache\MTO.Practices.Cache.csproj">
-      <Project>{a82ec1a2-f7c4-4b51-8bc1-bffea67e363d}</Project>
-      <Name>MTO.Practices.Cache</Name>
+    <ProjectReference Include="..\MTO.Practices.Cache.Couchbase\MTO.Practices.Cache.Couchbase.csproj">
+      <Project>{12f3a152-5ead-45ac-87ae-13698124dfd6}</Project>
+      <Name>MTO.Practices.Cache.Couchbase</Name>
     </ProjectReference>
     <ProjectReference Include="..\MTO.Practices.Common.Unity\MTO.Practices.Common.Unity.csproj">
       <Project>{7e363460-4917-4eac-9042-78790ca999fd}</Project>
@@ -145,10 +145,6 @@
     <ProjectReference Include="..\MTO.Practices.Common\MTO.Practices.Common.csproj">
       <Project>{2e3c8b7e-ee5e-4172-b55b-fd21b5612f95}</Project>
       <Name>MTO.Practices.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\MTO.Practices.Config\MTO.Practices.Config.csproj">
-      <Project>{548aab12-5f75-48e9-9323-1b2fc900186a}</Project>
-      <Name>MTO.Practices.Config</Name>
     </ProjectReference>
     <ProjectReference Include="..\MTO.Practices.Entity\MTO.Practices.Entity.csproj">
       <Project>{00df8e12-8368-4c68-9b46-0699f7ed9550}</Project>

@@ -1,7 +1,10 @@
 ﻿namespace MTO.Practices.Common
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Web;
+
+    using MTO.Practices.Common.Interfaces;
 
     /// <summary>
     /// Contrato para repositórios de contexto
@@ -13,6 +16,11 @@
         /// </summary>
         /// <returns>nova instância do contexto</returns>
         IContext NewInstance();
+
+        /// <summary>
+        /// Credenciais da thread atual
+        /// </summary>
+        ConcurrentDictionary<string, ICredential> Credentials { get; set; }
 
         /// <summary>
         /// Recupera se o usuário está autenticado
@@ -38,7 +46,9 @@
         /// <param name="userId"> The user Id. </param>
         /// <param name="userName"> The user Name. </param>
         /// <param name="activities"> The activities. </param>
-        void SetAuthenticated(Guid userId, string userName, string activities);
+        /// <param name="userProfile"> Perfil do usuário. </param>
+        /// <typeparam name="U"> Tipo de identificador usado para o usuário </typeparam>
+        void SetAuthenticated<U>(U userId, string userName, string activities, string userProfile = null);
 
         /// <summary>
         /// Recupera objetos do repositório compartilhado do contexto da aplicação

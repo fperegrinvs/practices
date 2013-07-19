@@ -1,0 +1,29 @@
+==== Versão 2.0 ==== 
+Incorpora alterações feitas para a Remaza
+
+Funcionalidades:
+- Implementação de cache em memória.
+- Incluindo Dapper (ORM)
+- Conversor de DateTime para Decimal (ddmmyyyy)
+- KeyValue (para conveniencia ao invés do keypairvalue que é passado por valor)
+- Método .ToBytes() para strings
+- Validador de CPF e CNPJ
+- Atributos para validar CPF e CNPJ
+- Adicionado Wrappers ( Transparent, Cache, WCF )
+- Atributo "RequiredIf"
+- AdminBaseController movido para o Practices
+- Criação do SiteBaseController
+- SideMenuActionForItemViewModel movido para o Practices
+
+Breaking Changes:
+- Cache do couchbase movido para outro pacote e renomeado para CouchBaseActiveCache
+- IContext tem a assinatura do método SetAuthenticated alterada.
+- WebContext foi movido para o namespace MTO.Practices.Common.Web.
+- TestContext foi movido para o namespace MTO.Practices.Common.Debug.
+- Practices.Config removido da solução.
+- EventException movido do Practices.Logger.Elmah para o Practices.Common
+- ILogger reformulado.
+- NullLogger movido para MTO.Practices.Common.Logging
+
+BugFixes:
+- Possível loop infinito entre listeners aninhados

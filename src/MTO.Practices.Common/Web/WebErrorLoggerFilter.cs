@@ -31,7 +31,7 @@
             }
 
             var host = filterContext.HttpContext.Request.Url != null ? filterContext.HttpContext.Request.Url.Host : "unknown";
-            Logger.Instance.LogError(filterContext.Exception, host);
+            Logger.Instance.LogException(filterContext.Exception, host);
         }
     }
 }

@@ -2,23 +2,25 @@
 {
     using System;
 
+    using MTO.Practices.Common.Interfaces;
+
     /// <summary>
     /// Classe reponsável por efetuar injeções de dependência.
     /// Ela é usada ao invés do container unity para facilitar os testes unitários e o isolamento das dependências.
     /// </summary>
-    public static class Injector
+    public class Injector
     {
         /// <summary>
         /// Handler para o método que injeta dependências.
         /// </summary>
-        private static ResolveEventHandler resolver = null;
+        private static IResolver resolver = null;
 
         /// <summary>
         /// Initializes static members of the <see cref="Injector"/> class.
         /// </summary>
         static Injector()
         {
-            // resolver = UnityResolver.Resolve;
+            // resolver = new FunqResolver();
         }
 
         /// <summary>
@@ -51,23 +53,44 @@
         /// </returns>
         public static T ResolveInterface<T>(string containerName = null) where T : class
         {
-            if (resolver == null)
-            {
-                throw new InvalidOperationException("Nenhum resolver está definido para o injector. Utilize o comando UnityResolver.Init() para usar o unity como resolver.");
-            }
-
-            var resolvedObject = resolver(typeof(T), containerName);
-            return (T)resolvedObject;
+            return resolver.Resolve<T>(containerName);
         }
 
         /// <summary>
-        /// Altera o método usado para realizar a injeção de dependências.
+        /// Registra mapeamento de inversão de dependencia
+        /// </summary>
+        /// <typeparam name="TService">typo a ser registrado</typeparam>
+        /// <param name="factory">instrução para se criar uma instância</param>
+        public static void Register<TService>(Func<TService> factory) where TService : class
+        {
+            resolver.Register(null, factory);
+        }
+
+        /// <summary>
+        /// Registra mapeamento de inversão de dependencia
+        /// </summary>
+        /// <typeparam name="TService">
+        /// typo a ser registrado
+        /// </typeparam>
+        /// <param name="name">
+        /// Nome do container
+        /// </param>
+        /// <param name="factory">
+        /// instrução para se criar uma instância
+        /// </param>
+        public static void Register<TService>(string name, Func<TService> factory) where TService : class
+        {
+            resolver.Register(name, factory);
+        }
+
+        /// <summary>
+        /// Recupera o método usado para realizar a injeção de dependências.
         /// Deve ser usado apenas no contexto de testes.
         /// </summary>
         /// <returns>
-        /// Retorna resolver utilizado
+        /// The UpStore.Practices.Common.Interfaces.IResolver.
         /// </returns>
-        internal static ResolveEventHandler GetResolver()
+        internal static IResolver GetResolver()
         {
             return resolver;
         }
@@ -79,7 +102,7 @@
         /// <param name="resolverHandler">
         /// Handler para o método responsável por injetar depenências.
         /// </param>
-        internal static void SetResolver(ResolveEventHandler resolverHandler)
+        internal static void SetResolver(IResolver resolverHandler)
         {
             resolver = resolverHandler;
         }

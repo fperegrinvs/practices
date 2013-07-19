@@ -1,15 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web.Mvc;
-using System.Web.Mvc.Html;
-using System.Linq.Expressions;
-using System.ComponentModel;
-using System.Reflection;
-
-namespace MTO.Practices.Common.Extensions
+﻿namespace MTO.Practices.Common.Extensions
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
+    using System.Linq;
+    using System.Linq.Expressions;
+    using System.Reflection;
+    using System.Web.Mvc;
+    using System.Web.Mvc.Html;
+
     public static class DropDownExtensions
     {
         private static Type GetNonNullableModelType(ModelMetadata modelMetadata)
@@ -18,7 +18,9 @@ namespace MTO.Practices.Common.Extensions
 
             Type underlyingType = Nullable.GetUnderlyingType(realModelType);
             if (underlyingType != null)
+            {
                 realModelType = underlyingType;
+            }
 
             return realModelType;
         }

@@ -1,59 +1,69 @@
-﻿namespace MTO.Practices.Common
+﻿namespace MTO.Practices.Common.Unity
 {
     using System;
-    using System.IO;
 
     using Microsoft.Practices.Unity;
     using Microsoft.Practices.Unity.Configuration;
 
+    using MTO.Practices.Common.Interfaces;
+
     /// <summary>
     /// Classe reponsável por efetuar injeções de dependência utilizando unity
     /// </summary>
-    public class UnityResolver
+    public class UnityResolver : IResolver
     {
         /// <summary>
         /// Inicializa o UnityResolver
         /// </summary>
         public static void Init()
         {
-            Injector.SetResolver(Resolve);
+            Injector.SetResolver(new UnityResolver());
         }
 
+        #region Implementation of IResolver
+
         /// <summary>
-        /// Resolve dependências utilizando o Unity
+        /// Resolve uma interface
         /// </summary>
-        /// <param name="type">
-        /// Tipo da interface a ser resolvida.
-        /// </param>
-        /// <param name="containerName">
-        /// TNome do container que contém as configurações da interface.
-        /// null = container padrão.
-        /// </param>
-        /// <returns>
-        /// Objeto com instância da classe injetada.
-        /// </returns>
-        internal static object Resolve(Type type, string containerName)
+        /// <typeparam name="T">tipo da interface</typeparam>
+        /// <param name="name">nome do container</param>
+        /// <returns>instância que implementa a interface</returns>
+        public T Resolve<T>(string name = null)
         {
+            var type = typeof(T);
+
             using (IUnityContainer container = new UnityContainer())
             {
-                if (string.IsNullOrWhiteSpace(containerName))
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     container.LoadConfiguration();
                 }
                 else
                 {
-                    try
-                    {
-                        container.LoadConfiguration(containerName);
-                    }
-                    catch (FileLoadException ex)
-                    {
-                        throw new FileLoadException(ex.Message + "\r\n >> Assembly referenciado por injeção de dependência precisa ser referenciado no projeto também: " + containerName);
-                    }
+                    container.LoadConfiguration(name);
                 }
 
-                return container.Resolve(type);
+                return (T)container.Resolve(type);
             }
         }
+
+        /// <summary>
+        /// Registra mapeamento de inversão de dependencia
+        /// </summary>
+        /// <typeparam name="TService">
+        /// typo a ser registrado
+        /// </typeparam>
+        /// <param name="name">
+        /// Nome do container
+        /// </param>
+        /// <param name="factory">
+        /// instrução para se criar uma instância
+        /// </param>
+        public void Register<TService>(string name, Func<TService> factory) where TService : class
+        {
+            throw new NotImplementedException("Não implementado no unity");
+        }
+
+        #endregion
     }
 }

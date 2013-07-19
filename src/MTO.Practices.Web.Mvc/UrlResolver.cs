@@ -198,7 +198,7 @@
         {
             if (pathId.HasValue && !PathResolvers.GetInvocationList().Any())
             {
-                Logger.Instance.LogError(new Exception("Nenhum Path Resolver registrado, impossível resolver PathId"));
+                Logger.Instance.LogException(new Exception("Nenhum Path Resolver registrado, impossível resolver PathId"));
                 return text;
             }
 
@@ -210,7 +210,7 @@
 
                 if (basePath == null)
                 {
-                    Logger.Instance.LogError(new Exception("Nenhum caminho encontrado para o PathId: " + pathId.Value));
+                    Logger.Instance.LogException(new Exception("Nenhum caminho encontrado para o PathId: " + pathId.Value));
                     return text;
                 }
             }
