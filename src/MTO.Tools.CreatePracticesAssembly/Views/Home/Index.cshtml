@@ -1,0 +1,17 @@
+﻿@model List<MTO.Tools.CreatePracticesAssembly.Models.Pacote>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Selecione os pactotes desejados</h2>
+@using (Html.BeginForm())
+{
+    foreach (var pacote in Model)
+    {
+        <div>
+            <input type="checkbox" name="pacote" value="@pacote.Id" /><span>@pacote.Name</span>
+        </div>
+    }
+    
+    <input type="submit" value="Gerar Pacote"/>
+}

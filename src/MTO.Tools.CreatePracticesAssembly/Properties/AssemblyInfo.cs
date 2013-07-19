@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Practices")]
-[assembly: AssemblyDescription("Utilities Library")]
+[assembly: AssemblyTitle("MTO.Tools.CreatePracticesAssembly")]
+[assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Many To One")]
-[assembly: AssemblyProduct("MTO.Practices.Common")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("MTO.Tools.CreatePracticesAssembly")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("00f581f8-bbe3-4303-a91e-c6d053a8a4ba")]
+[assembly: Guid("5db10408-caee-4d57-8e1a-620214b52e38")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -29,9 +29,7 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers 
+// You can specify all the values or you can default the Revision and Build Numbers 
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.1.0.0")]
-[assembly: AssemblyFileVersion("1.1.0.0")]
-[assembly: InternalsVisibleTo("MTO.Practices.Common.Unity")]
+[assembly: AssemblyVersion("1.0.0.0")]
+[assembly: AssemblyFileVersion("1.0.0.0")]
