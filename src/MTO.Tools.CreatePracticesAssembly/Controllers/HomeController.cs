@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Web.Http;
     using System.Web.Mvc;
 
     using MTO.Tools.CreatePracticesAssembly.Models;
@@ -37,7 +38,7 @@
             return this.View(pacotes);
         }
 
-        [HttpPost]
+        [System.Web.Mvc.HttpPost]
         public ActionResult Index(List<string> pacote)
         {
             var pacotesDictionary = this.GetPacotes().ToDictionary(c => c.Id);
