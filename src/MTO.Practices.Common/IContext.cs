@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Web;
 
     using MTO.Practices.Common.Interfaces;
@@ -27,6 +28,12 @@
         /// </summary>
         /// <returns>Verdadeiro se o usuário está autenticado</returns>
         bool IsAuthenticated();
+
+        /// <summary>
+        /// Recupera o perfil do usuário logado
+        /// </summary>
+        /// <returns>Perfil do usuário logado</returns>
+        string GetUserProfile();
 
         /// <summary>
         /// Recupera o nome do usuário logado
@@ -105,6 +112,13 @@
         /// <param name="name">Nome do Cookie</param>
         /// <returns>Valor do Cookie</returns>
         string RequestCookieValue(string name);
+
+        /// <summary>
+        /// Dicionário com os valores dos subcookies
+        /// </summary>
+        /// <param name="name">nome do cookie</param>
+        /// <returns>valores dos subcookies</returns>
+        Dictionary<string, string> RequestCookieDictionary(string name);
 
         /// <summary>
         /// Efetua logoff

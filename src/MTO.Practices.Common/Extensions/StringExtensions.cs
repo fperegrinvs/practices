@@ -4,6 +4,8 @@
     using System.Security.Cryptography;
     using System.Text;
 
+    using MTO.Practices.Common.Extensions;
+
     /// <summary>
     /// Extensores de String
     /// </summary>
@@ -37,6 +39,21 @@
             byte[] hash = md5.ComputeHash(inputBytes);
 
             return new Guid(hash);
+        }
+
+        /// <summary>
+        /// Calcula o Hash MD5 de uma string
+        /// </summary>
+        /// <param name="input">string a ter seu md5 calculado</param>
+        /// <returns>MD5 hash checksum da string</returns>
+        public static string Md5HashHexa(this string input)
+        {
+            MD5 md5 = new MD5CryptoServiceProvider();
+            var inBytes = Encoding.UTF8.GetBytes(input);
+
+            var retVal = md5.ComputeHash(inBytes);
+
+            return retVal.ToHexString();
         }
 
         /// <summary>

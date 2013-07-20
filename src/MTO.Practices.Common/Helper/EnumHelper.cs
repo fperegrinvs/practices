@@ -16,7 +16,7 @@
         /// <typeparam name="T">Tipo do enum</typeparam>
         /// <param name="enumFieldObject">Campo do enum</param>
         /// <returns>Valor do atributo</returns>
-        public static string GetDescription<T>(T enumFieldObject)
+        public static string GetDescription<T>(this T enumFieldObject) where T : struct
         {
             var enumType = typeof(T);
             var name = enumFieldObject.ToString();

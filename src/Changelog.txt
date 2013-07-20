@@ -1,3 +1,21 @@
+=== Versão 2.1 ===
+Ajustes para o CMS unificado funcionar na remaza
+
+Funcionalidades:
+- GetUserProfile no IContext
+- SiteBaseController não foi incluso na versão anterior
+- Método RequestCookieDictionary no IContext
+- Método Md5HashHexa que gera output em hexastring ao invés de guid
+
+Fixes:
+Interface IUserStore estava duplicada
+GetDescripton do extensor de enumeradores agora tem restrição de tipo (para facilitar inferência)
+
+Breaking Changes:
+- WebModule precisa ficar em um assembly separado. Ele é usado para extensões do admin do CMS e para evitar conflitos
+ de assemblies ou dificuldades de inferência, precisa ser a mesma dll utilizada no Admin e na extensão. Manter um
+ conjunto menor de items que mudam com pouca freqüência é o único caminho viável conhecido.
+
 ==== Versão 2.0 ==== 
 Incorpora alterações feitas para a Remaza
 

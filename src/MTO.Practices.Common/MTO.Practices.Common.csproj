@@ -107,7 +107,6 @@
     <Compile Include="InlineComparer.cs" />
     <Compile Include="Helper\DateTimeUtil.cs" />
     <Compile Include="Enumerators\WeekDayEnum.cs" />
-    <Compile Include="IUserStore.cs" />
     <Compile Include="JobManager\JobLogger.cs" />
     <Compile Include="JobManager\JobQueue.cs" />
     <Compile Include="JobManager\Job.cs" />

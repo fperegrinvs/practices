@@ -182,6 +182,10 @@
       <Project>{496e280b-840d-42a7-8e88-bc8b94fd2d9f}</Project>
       <Name>MTO.Practices.Web.Mvc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTO.Practices.WebModule\MTO.Practices.WebModule.csproj">
+      <Project>{d19bc3d3-d54b-4055-b0c0-e0bbdbb5751a}</Project>
+      <Name>MTO.Practices.WebModule</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTO.Practices.Zip\MTO.Practices.Zip.csproj">
       <Project>{068ff586-d40c-4a54-a283-c16ca3996f37}</Project>
       <Name>MTO.Practices.Zip</Name>

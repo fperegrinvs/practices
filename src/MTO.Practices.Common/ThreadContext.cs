@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Concurrent;
+    using System.Collections.Generic;
     using System.Runtime.Remoting.Messaging;
     using System.Web;
 
@@ -44,6 +45,15 @@
         public bool IsAuthenticated()
         {
             return !string.IsNullOrEmpty(this.Get<string>("UserName"));
+        }
+
+        /// <summary>
+        /// Recupera o perfil do usuário logado
+        /// </summary>
+        /// <returns>Perfil do usuário logado</returns>
+        public string GetUserProfile()
+        {
+            return this.Get<string>("UserProfile");
         }
 
         /// <summary>
@@ -165,6 +175,16 @@
         public string RequestCookieValue(string name)
         {
             return null;
+        }
+
+        /// <summary>
+        /// Dicionário com os valores dos subcookies
+        /// </summary>
+        /// <param name="name">nome do cookie</param>
+        /// <returns>valores dos subcookies</returns>
+        public Dictionary<string, string> RequestCookieDictionary(string name)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>

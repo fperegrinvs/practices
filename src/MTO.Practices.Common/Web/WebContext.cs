@@ -12,7 +12,7 @@
     using MTO.Practices.Common.Crypto;
     using MTO.Practices.Common.Interfaces;
 
-    using IUserStore = MTO.Practices.Common.IUserStore;
+    using IUserStore = MTO.Practices.Common.Interfaces.IUserStore;
 
     /// <summary>
     /// Gerencia o contexto através de Requests
@@ -116,6 +116,15 @@
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Recupera o perfil do usuário logado
+        /// </summary>
+        /// <returns>Perfil do usuário logado</returns>
+        public string GetUserProfile()
+        {
+            return this.Get<string>("UserProfile");
         }
 
         /// <summary>
@@ -323,6 +332,30 @@
         {
             var cookie = HttpContext.Current.Request.Cookies[name];
             return cookie == null ? "null" : cookie.Value;
+        }
+
+        /// <summary>
+        /// Dicionário com os valores dos subcookies
+        /// </summary>
+        /// <param name="name">nome do cookie</param>
+        /// <returns>valores dos subcookies</returns>
+        public Dictionary<string, string> RequestCookieDictionary(string name)
+        {
+            var value = this.RequestCookieValue(name);
+            if (value == null)
+            {
+                return null;
+            }
+
+            var result = new Dictionary<string, string>();
+            var parts = value.Split('&');
+            foreach (var part in parts)
+            {
+                var point = part.IndexOf('=');
+                result[part.Substring(0, point)] = (point + 1) < part.Length ? part.Substring(point + 1) : string.Empty;
+            }
+
+            return result;
         }
 
         /// <summary>
