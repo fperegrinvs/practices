@@ -138,6 +138,10 @@
       <Project>{12f3a152-5ead-45ac-87ae-13698124dfd6}</Project>
       <Name>MTO.Practices.Cache.Couchbase</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTO.Practices.Common.Funq\MTO.Practices.Common.Funq.csproj">
+      <Project>{0348e6fd-e3f3-4730-b4d5-bb4e21f36b36}</Project>
+      <Name>MTO.Practices.Common.Funq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTO.Practices.Common.Unity\MTO.Practices.Common.Unity.csproj">
       <Project>{7e363460-4917-4eac-9042-78790ca999fd}</Project>
       <Name>MTO.Practices.Common.Unity</Name>
