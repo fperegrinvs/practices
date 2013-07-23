@@ -163,7 +163,7 @@
                 var a = i;
                 idList.Add(TestJobQueue.Instance.Enqueue(
                 "op-err" + i,
-                () => { Thread.Sleep(10); Logger.Instance.LogError(new Exception("ERRO SOCORRO" + a)); },
+                () => { Thread.Sleep(10); Logger.Instance.LogException(new Exception("ERRO SOCORRO" + a)); },
                 "master"));
             }
 

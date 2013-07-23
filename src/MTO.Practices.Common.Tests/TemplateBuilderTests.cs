@@ -2,6 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Web.Script.Serialization;
+
+    using Antlr3.ST;
+
+    using MTO.Practices.Common.Templating.AttributeRenderer;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -22,6 +27,24 @@
         {
             var builder = new TemplateBuilder("Teste \\$ oi", null);
             Assert.AreEqual("Teste $ oi", builder.GetHtml());
+        }
+
+        [TestMethod]
+        public void Test_Bug_LandingPage()
+        {
+            //$bundleJs.Add(jquery-1.4.4.js)$
+            var html = @"
+
+<h1>$titulo$</h1>
+<p>
+$descricao$
+</p>";
+            var json = "{\"titulo\":\"Titulo da pagina 1,Titulo da pagina 1\",\"descricao\":\"Descrição da página 1,Descrição da página 1\"}";
+            var model = (IDictionary<string, object>)new JavaScriptSerializer().DeserializeObject(json);
+            var templateBuilder = new TemplateBuilder(html, new StringTemplateDictionaryModel(model));
+
+            var attributeRenderers = new Dictionary<Type, IAttributeRenderer> { { typeof(string), new DateOpRenderer() } };
+            var result = templateBuilder.GetHtml(attributeRenderers);
         }
 
         /// <summary>
