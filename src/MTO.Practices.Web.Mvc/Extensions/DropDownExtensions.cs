@@ -50,8 +50,9 @@
             Type enumType = GetNonNullableModelType(metadata);
             IEnumerable<TEnum> values = Enum.GetValues(enumType).Cast<TEnum>();
 
-            int i = 0;
             IEnumerable<SelectListItem> items = from value in values
+                                                let description = GetEnumDescription(value)
+                                                where description.ToLowerInvariant() != "disabled"
                                                 let enumName = Enum.GetName(enumType, value)
                                                 select new SelectListItem
                                                 {
