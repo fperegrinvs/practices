@@ -20,7 +20,7 @@
         /// <returns>Valor para a propriedade</returns>
         public static TProperty BindFlagsFor<TModel, TProperty>(this TModel model, Expression<Func<TModel, TProperty>> expression) where TModel : class
         {
-            string name = SelectExtensions.GetInputName(expression);
+            string name = DropDownExtensions.GetInputName(expression);
             var formValue = HttpContext.Current.Request.Form[name];
 
             if (string.IsNullOrWhiteSpace(formValue))

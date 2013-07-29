@@ -52,10 +52,11 @@
 
             int i = 0;
             IEnumerable<SelectListItem> items = from value in values
+                                                let enumName = Enum.GetName(enumType, value)
                                                 select new SelectListItem
                                                 {
                                                     Text = GetEnumDescription(value),
-                                                    Value = i++.ToString(),
+                                                    Value = enumName,
                                                     Selected = value.Equals(metadata.Model)
                                                 };
 
@@ -93,6 +94,25 @@
                 return new SelectList(items, "Key", "Value");
         }
 
+        /// <summary>
+        /// Retorna o nome de um enumerador
+        /// </summary>
+        /// <typeparam name="TModel">Tipo da model</typeparam>
+        /// <typeparam name="TProperty">Tipo do enumerador</typeparam>
+        /// <param name="expression">Expressao linq</param>
+        /// <returns>Nome do campo.</returns>
+        public static string GetInputName<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
+        {
+            if (expression.Body.NodeType == ExpressionType.Call)
+            {
+                var methodCallExpression = (MethodCallExpression)expression.Body;
+                var name = GetInputName(methodCallExpression);
+                return name.Substring(expression.Parameters[0].Name.Length + 1);
+            }
+
+            return expression.Body.ToString().Substring(expression.Parameters[0].Name.Length + 1);
+        }
+
         public static SelectList ToSelectListDay<T>(this T enumeration, string selected)
         {
             var source = Enum.GetValues(typeof(T));
@@ -103,9 +123,9 @@
 
             for (int i = 0; i < source.Length; i++)
             {
-                FieldInfo field = source.GetValue(i).GetType().GetField(source.GetValue(i).ToString());
+                var field = source.GetValue(i).GetType().GetField(source.GetValue(i).ToString());
                 
-                DisplayAttribute attrs = (DisplayAttribute)field.
+                var attrs = (DisplayAttribute)field.
                               GetCustomAttributes(displayAttributeType, false).First();
 
                 items.Add((int)source.GetValue(i), attrs.Name);
@@ -115,6 +135,21 @@
                 return new SelectList(items, "Key", "Value", selected);
             else
                 return new SelectList(items, "Key", "Value");
+        }
+
+        /// <summary>
+        /// Retorna o nome do campo de enumeração.
+        /// </summary>
+        /// <param name="expression">Expressão linq</param>
+        /// <returns>Nome do campo de enumeração.</returns>
+        private static string GetInputName(MethodCallExpression expression)
+        {
+            var methodCallExpression = expression.Object as MethodCallExpression;
+            if (methodCallExpression != null)
+            {
+                return GetInputName(methodCallExpression);
+            }
+            return expression.Object.ToString();
         }
     }
 }

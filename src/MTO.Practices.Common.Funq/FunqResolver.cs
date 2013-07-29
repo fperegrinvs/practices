@@ -16,6 +16,19 @@
         /// </summary>
         private static Container funqContainer;
 
+        /// <summary>
+        /// Resolver usado como failover do Funq (manter compatibilidade com o Unity)
+        /// </summary>
+        private static IResolver failoverResolver;
+
+        /// <summary>
+        /// Inicializa o FunqResolver
+        /// </summary>
+        public static void Init()
+        {
+            Injector.SetResolver(new FunqResolver());
+        }
+
         #region Implementation of IResolver
 
         /// <summary>
@@ -26,7 +39,19 @@
         /// <returns>instância que implementa a interface</returns>
         public T Resolve<T>(string name = null)
         {
-            return funqContainer.ResolveNamed<T>(name);
+            if (failoverResolver == null)
+            {
+                return funqContainer.ResolveNamed<T>(name);
+            }
+
+            try
+            {
+                return funqContainer.ResolveNamed<T>(name);
+            }
+            catch (ResolutionException)
+            {
+                return failoverResolver.Resolve<T>(name);
+            }
         }
 
         /// <summary>
@@ -61,7 +86,17 @@
                 funqContainer = new Container();
             }
 
-            Injector.SetResolver(new FunqResolver());
+            var currentResolver = Injector.GetResolver();
+            if (!(currentResolver is FunqResolver))
+            {
+                if (failoverResolver == null)
+                {
+                    failoverResolver = Injector.GetResolver();
+                }
+
+                Injector.SetResolver(new FunqResolver());
+            }
+
             funqContainer.Register(name, factory);
         }
     }

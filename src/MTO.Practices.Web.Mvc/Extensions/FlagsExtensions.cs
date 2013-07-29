@@ -43,7 +43,7 @@
         /// <returns>Dropdown list representando uma propriedade do tipo enumerador.</returns>
         public static MvcHtmlString FlagsCheckboxList<TModel, TProperty>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TProperty>> expression) where TModel : class where TProperty : struct
         {
-            string inputName = SelectExtensions.GetInputName(expression);
+            string inputName = DropDownExtensions.GetInputName(expression);
             var value = htmlHelper.ViewData.Model == null
                 ? default(TProperty)
                 : expression.Compile()(htmlHelper.ViewData.Model);
