@@ -1,5 +1,6 @@
 ﻿namespace MTO.Practices.Common.MEF
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.Composition;
     using System.ComponentModel.Composition.Hosting;
@@ -69,7 +70,13 @@
                 }
                 catch (ReflectionTypeLoadException ex)
                 {
-                    Logger.Instance.LogEvent(string.Join("\r\n", ex.LoaderExceptions.Select(x => x.ToString())));
+                    var msg = "Erro ao carregar assembly com dependencias não satisfeitas: " + file + "\r\n"
+                              + string.Join("\r\n", ex.LoaderExceptions.Select(x => x.ToString()));
+                    Logger.Instance.LogEvent(msg);
+                }
+                catch (BadImageFormatException)
+                {
+                    Logger.Instance.LogEvent("Erro ao tentar carregar assembly supostamente não .net: " + file);
                 }
             }
 
