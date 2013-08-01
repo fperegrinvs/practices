@@ -352,7 +352,12 @@
             foreach (var part in parts)
             {
                 var point = part.IndexOf('=');
-                result[part.Substring(0, point)] = (point + 1) < part.Length ? part.Substring(point + 1) : string.Empty;
+                if (point >= 0)
+                {
+                    result[part.Substring(0, point)] = (point + 1) < part.Length
+                                                           ? part.Substring(point + 1)
+                                                           : string.Empty;
+                }
             }
 
             return result;
