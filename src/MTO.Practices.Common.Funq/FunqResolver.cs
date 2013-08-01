@@ -26,6 +26,11 @@
         /// </summary>
         public static void Init()
         {
+            if (Injector.GetResolver() != null)
+            {
+                failoverResolver = Injector.GetResolver();
+            }
+
             Injector.SetResolver(new FunqResolver());
         }
 
