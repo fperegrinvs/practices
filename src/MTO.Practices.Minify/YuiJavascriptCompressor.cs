@@ -5,7 +5,7 @@
     /// <summary>
     /// Implementação do compressor JS usando o YUI Compressor
     /// </summary>
-    internal class YuiJavascriptCompressor : IJavaScriptCompressor
+    public class YuiJavascriptCompressor : IJavaScriptCompressor
     {
         /// <summary>
         /// Comprime conteúdo de arquivo JavaScript

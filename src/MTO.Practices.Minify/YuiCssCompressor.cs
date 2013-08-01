@@ -5,7 +5,7 @@
     /// <summary>
     /// Implementação do compressor de CSS usando o YUI Compressor.
     /// </summary>
-    internal class YuiCssCompressor : ICssCompressor
+    public class YuiCssCompressor : ICssCompressor
     {
         /// <summary>
         /// Comprime conteúdo de arquivo CSS

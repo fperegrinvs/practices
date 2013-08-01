@@ -14,7 +14,7 @@
     /// <summary>
     /// Implementação padrão para o cache ativo usando CouchBase para cache distribuido e o Enterprise Library para cache local.
     /// </summary>
-    internal class CouchBaseActiveCache : IActiveCache
+    public class CouchBaseActiveCache : IActiveCache
     {
         /// <summary>
         /// Cliente do couchbase
