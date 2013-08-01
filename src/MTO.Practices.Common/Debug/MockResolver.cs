@@ -143,11 +143,16 @@
         /// <returns>instância que implementa a interface</returns>
         public T Resolve<T>(string name = null)
         {
-            var type = typeof(T);
+            var type = typeof(T).Name;
 
-            if (MockedTypes.ContainsKey(type.Name))
+            if (!string.IsNullOrEmpty(name))
             {
-                return (T)MockedTypes[type.Name];
+                type += "@" + name;
+            }
+
+            if (MockedTypes.ContainsKey(type))
+            {
+                return (T)MockedTypes[type];
             }
 
             return Failover.Resolve<T>(name);
