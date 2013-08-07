@@ -64,3 +64,4 @@ _ReSharper*/
 /lib/Contracts
 *.ide
 /src/MTO.Tools.CreatePracticesAssembly/tmp
+/src/MTO.Tools.CreatePracticesAssembly/tmp
