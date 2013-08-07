@@ -1,5 +1,6 @@
 ﻿namespace MTO.Practices.Common.Helper
 {
+    using System;
     using System.Globalization;
 
     /// <summary>
@@ -31,7 +32,7 @@
             var soma = 0;
             for (int i = 0; i < 12; i++)
             {
-                soma += int.Parse(tempCnpj[i].ToString(CultureInfo.InvariantCulture)) * multiplicador1[i];
+                soma += (tempCnpj[i] ^ '0') * multiplicador1[i];
             }
 
             var resto = soma % 11;
@@ -49,7 +50,7 @@
             soma = 0;
             for (var i = 0; i < 13; i++)
             {
-                soma += int.Parse(tempCnpj[i].ToString(CultureInfo.InvariantCulture)) * multiplicador2[i];
+                soma += (tempCnpj[i] ^ '0') * multiplicador2[i];
             }
 
             resto = soma % 11;
@@ -63,7 +64,7 @@
             }
 
             digito = digito + resto.ToString(CultureInfo.InvariantCulture);
-            return cnpj.EndsWith(digito);
+            return cnpj.EndsWith(digito, StringComparison.Ordinal);
         }
 
         /// <summary>
@@ -87,7 +88,7 @@
 
             for (int i = 0; i < 9; i++)
             {
-                soma += int.Parse(tempCpf[i].ToString(CultureInfo.InvariantCulture)) * multiplicador1[i];
+                soma += (tempCpf[i] ^ '0') * multiplicador1[i];
             }
 
             var resto = soma % 11;
@@ -105,7 +106,7 @@
             soma = 0;
             for (var i = 0; i < 10; i++)
             {
-                soma += int.Parse(tempCpf[i].ToString(CultureInfo.InvariantCulture)) * multiplicador2[i];
+                soma += (tempCpf[i] ^ '0') * multiplicador2[i];
             }
 
             resto = soma % 11;
@@ -119,7 +120,7 @@
             }
 
             digito = digito + resto.ToString(CultureInfo.InvariantCulture);
-            return cpf.EndsWith(digito);
+            return cpf.EndsWith(digito, StringComparison.Ordinal);
         }
     }
 }
