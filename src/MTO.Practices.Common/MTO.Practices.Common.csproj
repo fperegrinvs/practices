@@ -80,6 +80,7 @@
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Cache\SimpleCache.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="Crypto\AsymmetricEncryption.cs" />
     <Compile Include="Data\SqlMapper.cs" />
     <Compile Include="Enumerators\CreditCardTypeEnum.cs" />
     <Compile Include="Enumerators\LogTypeEnum.cs" />
