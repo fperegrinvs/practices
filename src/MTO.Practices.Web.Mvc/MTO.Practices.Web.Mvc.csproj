@@ -43,6 +43,7 @@
     <Compile Include="Attributes\RequiredIfAttribute.cs" />
     <Compile Include="Attributes\ValidateCNPJAttribute.cs" />
     <Compile Include="Attributes\ValidateCPFAttribute.cs" />
+    <Compile Include="Attributes\ValidateCreditCardAttribute.cs" />
     <Compile Include="Controllers\AdminBaseController.cs" />
     <Compile Include="Controllers\SiteBaseController.cs" />
     <Compile Include="Extensions\BinderExtensions.cs" />

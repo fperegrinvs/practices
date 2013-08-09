@@ -71,6 +71,8 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CryptoTests.cs" />
+    <Compile Include="ValidationTests.cs" />
     <Compile Include="ListExtentionTests.cs" />
     <Compile Include="GeoLocationTests.cs" />
     <Compile Include="JobManagerTests.cs" />
@@ -80,6 +82,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TemplateBuilderTests.cs" />
     <Compile Include="ThreadContextTests.cs" />
+    <Compile Include="CreditCardValidationTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MTO.Practices.Common\MTO.Practices.Common.csproj">

@@ -80,11 +80,14 @@
     <Compile Include="Cache\ICache.cs" />
     <Compile Include="Cache\SimpleCache.cs" />
     <Compile Include="Context.cs" />
+    <Compile Include="Crypto\AsymmetricEncryption.cs" />
     <Compile Include="Data\SqlMapper.cs" />
+    <Compile Include="Enumerators\CreditCardTypeEnum.cs" />
     <Compile Include="Enumerators\LogTypeEnum.cs" />
     <Compile Include="Exceptions\EventException.cs" />
     <Compile Include="Exceptions\ServiceUnavailableException.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
+    <Compile Include="Helper\CreditCardValidation.cs" />
     <Compile Include="Helper\Validation.cs" />
     <Compile Include="Interfaces\ICredential.cs" />
     <Compile Include="Interfaces\IResolver.cs" />
