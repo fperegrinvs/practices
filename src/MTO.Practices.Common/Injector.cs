@@ -88,7 +88,7 @@
         /// Deve ser usado apenas no contexto de testes.
         /// </summary>
         /// <returns>
-        /// The UpStore.Practices.Common.Interfaces.IResolver.
+        /// The MTO.Practices.Common.Interfaces.IResolver.
         /// </returns>
         internal static IResolver GetResolver()
         {
