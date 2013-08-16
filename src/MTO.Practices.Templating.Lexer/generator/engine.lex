@@ -63,7 +63,6 @@ StringSQ        \'([^\'\\]+(\\\')?)+\'
 <COMMAND>\.                         					{ this.AddToken(Tokens.OpenCommandArg, yytext); yy_push_state(COMMAND_ARG); yy_push_state(COMMAND_ARG_NAME); }
 <COMMAND>\$												{ this.AddToken(Tokens.CloseCommand, yytext); yy_pop_state(); }
 <COMMAND>\(												{ this.AddToken(Tokens.OpenCommandContent, yytext); yy_push_state(COMMAND_CONTENT); }
-<COMMAND_CONTENT>\)										{ this.AddToken(Tokens.OpenCommandContent, yytext); yy_pop_state(); }
 <COMMAND_ARG_NAME>[a-zA-Z]+								{ this.AddToken(Tokens.Content, yytext); yy_pop_state(); yy_pop_state(); }
 <COMMAND_ARG>\(											{ this.AddToken(Tokens.OpenComandArgValue, yytext); yy_push_state(COMMAND_ARG_VALUE); }
 <COMMAND_ARG_VALUE,COMMAND_CONTENT>[^\)\$]+				{ this.AddToken(Tokens.Content, yytext); }

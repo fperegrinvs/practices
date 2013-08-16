@@ -1,19 +1,23 @@
 ﻿namespace MTO.Practices.Templating.Lexer
 {
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Text;
+
+    using MTO.Practices.Templating.Lexer.Interfaces;
+    using MTO.Practices.Templating.Lexer.Model;
 
     /// <summary>
     /// Classe base para implementação de template engine
     /// </summary>
-    public class TemplateEngineBase
+    public abstract class TemplateEngineBase : ITemplateEngine
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateEngineBase"/> class.
         /// </summary>
         public TemplateEngineBase()
         {
-            this.TagStack = new Stack<Tag>();
+            this.Stack = new Stack<ITemplateElement>();
         }
 
         /// <summary>
@@ -29,18 +33,18 @@
         /// <summary>
         /// Tag atual
         /// </summary>
-        public Tag CurrentTag
+        public ITemplateElement CurrentElement
         {
             get
             {
-                return this.TagStack.Count == 0 ? null : this.TagStack.Peek();
+                return this.Stack.Count == 0 ? null : this.Stack.Peek();
             }
         }
 
         /// <summary>
-        /// Pilha de Tags
+        /// Pilha de elementos do template durante o processamento
         /// </summary>
-        protected Stack<Tag> TagStack { get; set; }
+        protected Stack<ITemplateElement> Stack { get; set; }
 
         /// <summary>
         /// Adiciona nova tag à pilha de Tags
@@ -48,7 +52,7 @@
         /// <param name="tagName">nome da tag</param>
         public void NewTag(string tagName)
         {
-            this.TagStack.Push(new Tag(tagName));
+            this.Stack.Push(new Tag(tagName));
         }
 
         /// <summary>
@@ -58,7 +62,7 @@
         /// <param name="value">valor do parâmetro</param>
         public void AddTagArg(string argument, string value)
         {
-            this.TagStack.Peek().Arguments[argument] = value;
+            this.Stack.Peek().AddArgument(argument, value);
         }
 
         /// <summary>
@@ -69,8 +73,19 @@
         /// </returns>
         public virtual string EndTag()
         {
-            this.TagStack.Pop();
+            Debug.Assert(this.Stack.Peek() is Tag, "Tentando fechar tag quando o elemento do topo da pilha não é uma tag.");
+            this.Stack.Pop();
             return string.Empty;
+        }
+
+        /// <summary>
+        /// Substitui propriedade (variável) pelo valor apropriado
+        /// </summary>
+        /// <param name="property">propriedade a ser substituida</param>
+        /// <returns>retorno da substituição da propriedade</returns>
+        public virtual string ReplaceProperty(string property)
+        {
+            return property;
         }
 
         /// <summary>
@@ -87,6 +102,22 @@
         /// </returns>
         public virtual string ProcessContent(string content, Tokens? token = null)
         {
+            if (this.Stack.Count == 0)
+            {
+                return content;
+            }
+
+            return this.Stack.Peek().ProcessContent(content) ?? "";
+        }
+
+        /// <summary>
+        /// Processa tag e retorna o seu resultado
+        /// </summary>
+        /// <param name="content">conteúdo relacionado à tag</param>
+        /// <returns>conteúdo processado</returns>
+        public virtual string ProcessTag(string content)
+        {
+            // aqui processa as tags dos plugins e td mais
             return content;
         }
 
@@ -98,7 +129,67 @@
         /// <returns>resultado do processamento do token</returns>
         public virtual string ProcessOther(Tokens tokenType, string tokenValue)
         {
-            return string.Empty;
+            return "";
+        }
+
+        /// <summary>
+        /// Processa uma url
+        /// </summary>
+        /// <param name="content">endereço da url (incluindo <![CDATA[<a href="]]]>)</param>
+        /// <returns>resultado do processamento</returns>
+        public virtual string ProcessUrl(string content)
+        {
+            return content;
+        }
+
+        /// <summary>
+        /// Evento disparado quando o fim do template é atingido
+        /// </summary>
+        public virtual void EOF()
+        {
+        }
+
+        /// <summary>
+        /// Inicia novo comando na pilha de comandos
+        /// </summary>
+        /// <param name="name">Nome do novo comando</param>
+        public virtual void NewCommand(string name)
+        {
+            this.Stack.Push(new Command(name));
+        }
+
+        /// <summary>
+        /// Inicia novo argumento
+        /// </summary>
+        public virtual void NewCommandArg()
+        {
+            this.Stack.Peek().StartArgument();
+        }
+
+        /// <summary>
+        /// Inicia novo argumento de comando
+        /// </summary>
+        public virtual void NewCommandArgValue()
+        {
+        }
+
+        /// <summary>
+        /// Processa argumento ou conteúdo do comando
+        /// </summary>
+        public virtual void ProcessCommandContent()
+        {
+        }
+
+        /// <summary>
+        /// Processa o comando
+        /// </summary>
+        /// <returns> O resultado do processamento do comando </returns>
+        public virtual string ProcessCommand()
+        {
+            // aqui processa os comandos dos plugins e td mais
+            this.Stack.Pop();
+
+            return ""; // retornar o conteúdoa qui
         }
 
         /// <summary>

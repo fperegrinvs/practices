@@ -103,6 +103,6 @@
         /// <summary>
         /// Inicio dos argumentos de um comando
         /// </summary>
-        OpenComandArgValue = 18,
+        OpenComandArgValue = 19,
     }
 }

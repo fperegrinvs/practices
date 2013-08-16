@@ -42,8 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
-    <Compile Include="Tag.cs" />
-    <Compile Include="Enumerators\TagStatusEnum.cs" />
+    <Compile Include="Interfaces\ITemplateElement.cs" />
+    <Compile Include="Model\Command.cs" />
+    <Compile Include="Model\Tag.cs" />
+    <Compile Include="Enumerators\ElementStatusEnum.cs" />
     <Compile Include="GPlexBuffer.cs" />
     <Compile Include="Interfaces\ITemplateEngine.cs" />
     <Compile Include="Parser.cs" />

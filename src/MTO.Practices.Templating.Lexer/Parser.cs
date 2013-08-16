@@ -2,8 +2,8 @@
 {
     using System.Text;
 
-    using MTO.Practices.Templating.Lexer.Interfaces;
     using MTO.Practices.Templating.Lexer.Enumerators;
+    using MTO.Practices.Templating.Lexer.Interfaces;
 
     /// <summary>
     /// Faz parse de um template tokenizado
@@ -28,7 +28,7 @@
         /// <summary>
         /// Indica se os argumentos da tag atual estão abertos.
         /// </summary>
-        private bool openTagArg = false;
+        private bool openTagArg;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Parser"/> class.
@@ -70,12 +70,12 @@
             while (iter.MoveNext())
             {
                 var level = 1;
-                while (this.templateEngine.CurrentTag != null && this.templateEngine.CurrentTag.TagStatus != TagStatusEnum.Default)
+                while (this.templateEngine.CurrentElement != null && this.templateEngine.CurrentElement.ElementStatus != ElementStatusEnum.Default)
                 {
                     // registra a tag atual
                     if (tagName == string.Empty)
                     {
-                        tagName = this.templateEngine.CurrentTag.Name;
+                        tagName = this.templateEngine.CurrentElement.Name;
                     }
 
                     if (iter.Current.State == (int)Tokens.TagName && tagName == iter.Current.Content)
@@ -90,7 +90,7 @@
                         break;
                     }
 
-                    if (this.templateEngine.CurrentTag.TagStatus == TagStatusEnum.SkipContent)
+                    if (this.templateEngine.CurrentElement.ElementStatus == ElementStatusEnum.SkipContent)
                     {
                         // pula processamento do conteúdo da tag
                     }
@@ -172,6 +172,21 @@
                     return this.templateEngine.ReplaceProperty(token.Content);
                 case Tokens.Url:
                     return this.templateEngine.ProcessUrl(token.Content);
+                case Tokens.OpenCommand:
+                    this.templateEngine.NewCommand(token.Content);
+                    break;
+                case Tokens.OpenCommandContent:
+                case Tokens.OpenCommandArg:
+                    this.templateEngine.NewCommandArg();
+                    break;
+                case Tokens.OpenComandArgValue:
+                    this.templateEngine.NewCommandArgValue();
+                    break;
+                case Tokens.CloseCommandContent:
+                    this.templateEngine.ProcessCommandContent();
+                    break;
+                case Tokens.CloseCommand:
+                    return this.templateEngine.ProcessCommand();
             }
 
             return string.Empty;

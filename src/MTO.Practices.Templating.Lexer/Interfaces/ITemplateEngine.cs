@@ -18,7 +18,7 @@
         /// <summary>
         /// tag atual
         /// </summary>
-        Tag CurrentTag { get; }
+        ITemplateElement CurrentElement { get; }
 
         /// <summary>
         /// Inicio de comentário
@@ -110,5 +110,32 @@
         /// Evento disparado quando o fim do template é atingido
         /// </summary>
         void EOF();
+
+        /// <summary>
+        /// Inicia novo comando na pilha de comandos
+        /// </summary>
+        /// <param name="name">Nome do novo comando</param>
+        void NewCommand(string name);
+        
+        /// <summary>
+        /// Inicia novo argumento
+        /// </summary>
+        void NewCommandArg();
+
+        /// <summary>
+        /// Inicia novo argumento de comando
+        /// </summary>
+        void NewCommandArgValue();
+
+        /// <summary>
+        /// Processa argumento ou conteúdo do comando
+        /// </summary>
+        void ProcessCommandContent();
+
+        /// <summary>
+        /// Processa o comando
+        /// </summary>
+        /// <returns> O resultado do processamento do comando </returns>
+        string ProcessCommand();
     }
 }
