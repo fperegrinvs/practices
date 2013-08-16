@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     /// <summary>
     /// Métodos para facilitar a manipulação do scanner

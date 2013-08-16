@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer.Interfaces
+﻿namespace MTO.Practices.Templating.Lexer.Interfaces
 {
     /// <summary>
     /// Contrato para processamento de templates
@@ -16,9 +16,9 @@
         StartEnum CurrentState { get; set; }
 
         /// <summary>
-        /// Comando atual
+        /// tag atual
         /// </summary>
-        Command CurrentCommand { get; }
+        Tag CurrentTag { get; }
 
         /// <summary>
         /// Inicio de comentário
@@ -43,25 +43,25 @@
         string EndComment(string comment);
 
         /// <summary>
-        /// Adiciona novo comando à pilha de comandos
+        /// Adiciona nova tag à pilha de tags
         /// </summary>
-        /// <param name="commandName">nome do commando</param>
-        void NewCommand(string commandName);
+        /// <param name="tagName">nome da tag</param>
+        void NewTag(string tagName);
 
         /// <summary>
-        /// Adiciona novo parâmetro ao comando atual
+        /// Adiciona novo parâmetro à tag atual
         /// </summary>
         /// <param name="argument">nome do parâmetro</param>
         /// <param name="value">valor do parâmetro</param>
-        void AddCommandArg(string argument, string value);
+        void AddTagArg(string argument, string value);
 
         /// <summary>
-        /// Finaliza comando atual
+        /// Finaliza tag atual
         /// </summary>
         /// <returns>
         /// The System.String.
         /// </returns>
-        string EndCommand();
+        string EndTag();
 
         /// <summary>
         /// Substitui propriedade (variável) pelo valor apropriado
@@ -85,11 +85,11 @@
         string ProcessContent(string content, Tokens? token = null);
 
         /// <summary>
-        /// Processa comando e retorna o seu resultado
+        /// Processa tag e retorna o seu resultado
         /// </summary>
-        /// <param name="content">conteúdo relacionado ao comando</param>
+        /// <param name="content">conteúdo relacionado à tag</param>
         /// <returns>conteúdo processado</returns>
-        string ProcessCommand(string content);
+        string ProcessTag(string content);
 
         /// <summary>
         /// Processa outro tipo de token

@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     /// <summary>
     /// Enumerador de estados iniciais
@@ -11,19 +11,19 @@
         Initial = 0,
 
         /// <summary>
-        /// Definição de comando da upstore
+        /// Definição de tag da engine de templates
         /// </summary>
-        Command = 1,
+        Tag = 1,
 
         /// <summary>
-        /// Parâmetros de um comando
+        /// Parâmetros de uma tag
         /// </summary>
-        CommandArg = 2,
+        TagArg = 2,
 
         /// <summary>
-        /// Nome de um comando
+        /// Nome de uma tag
         /// </summary>
-        CommandName = 3,
+        TagName = 3,
 
         /// <summary>
         /// Região de comentário

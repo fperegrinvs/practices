@@ -1,7 +1,5 @@
-﻿namespace MTO.Practices.Common.ValueInjector
+﻿namespace System
 {
-    using System;
-
     using Omu.ValueInjecter;
 
     /// <summary>

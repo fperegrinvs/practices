@@ -1,9 +1,9 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     using System.Text;
 
-    using MTO.Templating.Lexer.Enumerators;
-    using MTO.Templating.Lexer.Interfaces;
+    using MTO.Practices.Templating.Lexer.Interfaces;
+    using MTO.Practices.Templating.Lexer.Enumerators;
 
     /// <summary>
     /// Faz parse de um template tokenizado
@@ -26,9 +26,9 @@
         private readonly ITemplateEngine templateEngine;
 
         /// <summary>
-        /// Indica se os argumentos do comando atual estão abertos.
+        /// Indica se os argumentos da tag atual estão abertos.
         /// </summary>
-        private bool openCommandArg = false;
+        private bool openTagArg = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Parser"/> class.
@@ -65,38 +65,38 @@
         /// <returns>string com o resultado do processamento</returns>
         public string ProcessTokenList()
         {
-            var commandName = string.Empty;
+            var tagName = string.Empty;
             var iter = this.tokens.GetEnumerator();
             while (iter.MoveNext())
             {
                 var level = 1;
-                while (this.templateEngine.CurrentCommand != null && this.templateEngine.CurrentCommand.CommandStatus != CommandStatusEnum.Default)
+                while (this.templateEngine.CurrentTag != null && this.templateEngine.CurrentTag.TagStatus != TagStatusEnum.Default)
                 {
-                    // registra o comando atual
-                    if (commandName == string.Empty)
+                    // registra a tag atual
+                    if (tagName == string.Empty)
                     {
-                        commandName = this.templateEngine.CurrentCommand.Name;
+                        tagName = this.templateEngine.CurrentTag.Name;
                     }
 
-                    if (iter.Current.State == (int)Tokens.CommandName && commandName == iter.Current.Content)
+                    if (iter.Current.State == (int)Tokens.TagName && tagName == iter.Current.Content)
                     {
                         ++level;
                     }
 
-                    // fim do comando
-                    if (iter.Current.State == (int)Tokens.CommandCloseTag && commandName == iter.Current.Content && --level == 0)
+                    // fim da tag
+                    if (iter.Current.State == (int)Tokens.CloseMtoTag && tagName == iter.Current.Content && --level == 0)
                     {
-                        commandName = string.Empty;
+                        tagName = string.Empty;
                         break;
                     }
 
-                    if (this.templateEngine.CurrentCommand.CommandStatus == CommandStatusEnum.SkipContent)
+                    if (this.templateEngine.CurrentTag.TagStatus == TagStatusEnum.SkipContent)
                     {
-                        // pula processamento do conteúdo do comando
+                        // pula processamento do conteúdo da tag
                     }
                     else
                     {
-                        // comando é processado como conteúdo
+                        // tag é processado como conteúdo
                         var token = iter.Current;
                         var tresult = this.templateEngine.ProcessContent(token.Content, (Tokens)iter.Current.State);
                         if (!string.IsNullOrEmpty(tresult))
@@ -132,39 +132,39 @@
             switch ((Tokens)token.State)
             {
                 case Tokens.NewLine:
-                case Tokens.OpenTag:
-                case Tokens.CloseTag:
+                case Tokens.OpenHtmlTag:
+                case Tokens.CloseHtmlTag:
                 case Tokens.Content:
                     return this.templateEngine.ProcessContent(token.Content);
                 case Tokens.CommentStart:
                     return this.templateEngine.StartComment(token.Content);
                 case Tokens.CommentEnd:
                     return this.templateEngine.EndComment(token.Content);
-                case Tokens.CommandArg:
-                    this.openCommandArg = true;
+                case Tokens.TagArg:
+                    this.openTagArg = true;
                     var parts = token.Content.Split('=');
-                    this.templateEngine.AddCommandArg(parts[0], parts[1]);
+                    this.templateEngine.AddTagArg(parts[0], parts[1]);
                     break;
-                case Tokens.CommandCloseArg:
-                    this.openCommandArg = false;
-                    return this.templateEngine.ProcessCommand(string.Empty);
-                case Tokens.CommandCloseTag:
-                    if (this.openCommandArg)
+                case Tokens.TagClosingArg:
+                    this.openTagArg = false;
+                    return this.templateEngine.ProcessTag(string.Empty);
+                case Tokens.CloseMtoTag:
+                    if (this.openTagArg)
                     {
-                        this.openCommandArg = false;
-                        var result = this.templateEngine.ProcessCommand(string.Empty);
+                        this.openTagArg = false;
+                        var result = this.templateEngine.ProcessTag(string.Empty);
                         if (!string.IsNullOrEmpty(result))
                         {
                             this.output.Append(result);
                         }
                     }
 
-                    return this.templateEngine.EndCommand();
-                case Tokens.CommandName:
-                    this.templateEngine.NewCommand(token.Content);
+                    return this.templateEngine.EndTag();
+                case Tokens.TagName:
+                    this.templateEngine.NewTag(token.Content);
                     break;
-                case Tokens.CommandOpenTag:
-                    return token.Start == 0 ? this.templateEngine.ProcessOther(Tokens.CommandOpenTag, token.Content) : string.Empty;
+                case Tokens.OpenMtoTag:
+                    return token.Start == 0 ? this.templateEngine.ProcessOther(Tokens.OpenMtoTag, token.Content) : string.Empty;
                 case Tokens.EOF:
                     this.templateEngine.EOF();
                     break;

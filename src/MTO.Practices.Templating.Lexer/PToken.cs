@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     using System.Runtime.Serialization;
 

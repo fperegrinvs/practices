@@ -3,7 +3,6 @@
     using System;
 
     using MTO.Practices.Common.Extensions;
-    using MTO.Practices.Common.ValueInjector;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
 

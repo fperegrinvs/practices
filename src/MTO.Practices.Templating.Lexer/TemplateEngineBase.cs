@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     using System.Collections.Generic;
     using System.Text;
@@ -13,7 +13,7 @@
         /// </summary>
         public TemplateEngineBase()
         {
-            this.CommandStack = new Stack<Command>();
+            this.TagStack = new Stack<Tag>();
         }
 
         /// <summary>
@@ -27,49 +27,49 @@
         public Parser Parser { get; set; }
 
         /// <summary>
-        /// Comando atual
+        /// Tag atual
         /// </summary>
-        public Command CurrentCommand
+        public Tag CurrentTag
         {
             get
             {
-                return this.CommandStack.Count == 0 ? null : this.CommandStack.Peek();
+                return this.TagStack.Count == 0 ? null : this.TagStack.Peek();
             }
         }
 
         /// <summary>
-        /// Pilha de comandos
+        /// Pilha de Tags
         /// </summary>
-        protected Stack<Command> CommandStack { get; set; }
+        protected Stack<Tag> TagStack { get; set; }
 
         /// <summary>
-        /// Adiciona novo comando à pilha de comandos
+        /// Adiciona nova tag à pilha de Tags
         /// </summary>
-        /// <param name="commandName">nome do commando</param>
-        public void NewCommand(string commandName)
+        /// <param name="tagName">nome da tag</param>
+        public void NewTag(string tagName)
         {
-            this.CommandStack.Push(new Command(commandName));
+            this.TagStack.Push(new Tag(tagName));
         }
 
         /// <summary>
-        /// Adiciona novo parâmetro ao comando atual
+        /// Adiciona novo parâmetro aa tag atual
         /// </summary>
         /// <param name="argument">nome do parâmetro</param>
         /// <param name="value">valor do parâmetro</param>
-        public void AddCommandArg(string argument, string value)
+        public void AddTagArg(string argument, string value)
         {
-            this.CommandStack.Peek().Arguments[argument] = value;
+            this.TagStack.Peek().Arguments[argument] = value;
         }
 
         /// <summary>
-        /// Finaliza comando atual
+        /// Finaliza Tag atual
         /// </summary>
         /// <returns>
         /// The System.String.
         /// </returns>
-        public virtual string EndCommand()
+        public virtual string EndTag()
         {
-            this.CommandStack.Pop();
+            this.TagStack.Pop();
             return string.Empty;
         }
 

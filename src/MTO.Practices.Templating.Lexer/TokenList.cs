@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     using System.Collections;
     using System.Collections.Generic;
@@ -75,7 +75,7 @@
         /// </param>
         public void Add(Tokens state, string content, int line, int col, StartEnum start)
         {
-            if (state == Tokens.CommandArg)
+            if (state == Tokens.TagArg)
             {
                 var elms = content.Split('=');
                 if (elms.Length == 2 && !string.IsNullOrEmpty(elms[1]))

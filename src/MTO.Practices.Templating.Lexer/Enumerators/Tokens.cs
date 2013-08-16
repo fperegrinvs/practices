@@ -1,4 +1,4 @@
-﻿namespace MTO.Templating.Lexer
+﻿namespace MTO.Practices.Templating.Lexer
 {
     /// <summary>
     /// Tipos de token definidos
@@ -21,24 +21,24 @@
         NewLine = 2,
 
         /// <summary>
-        /// Abertura de tag de comando
+        /// Abertura de tag da engine de template
         /// </summary>
-        CommandOpenTag = 3,
+        OpenMtoTag = 3,
 
         /// <summary>
-        /// Fechamento de tag de comando
+        /// Fechamento de tag da engine de template
         /// </summary>
-        CommandCloseTag = 4,
+        CloseMtoTag = 4,
 
         /// <summary>
         /// Abertura de tag qualquer
         /// </summary>
-        OpenTag = 5,
+        OpenHtmlTag = 5,
 
         /// <summary>
         /// Fechamento de tag genérica
         /// </summary>
-        CloseTag = 6,
+        CloseHtmlTag = 6,
 
         /// <summary>
         /// Conteúdo qualquer
@@ -46,19 +46,19 @@
         Content = 7,
 
         /// <summary>
-        /// Nome do comando a ser executado
+        /// Nome da tag a ser executado
         /// </summary>
-        CommandName = 8,
+        TagName = 8,
 
         /// <summary>
-        /// Fim da linha da especificação de parametros de um comando
+        /// Fim da linha da especificação de parametros de uma tag
         /// </summary>
-        CommandCloseArg = 9,
+        TagClosingArg = 9,
 
         /// <summary>
-        /// Parâmetro de um comando
+        /// Parâmetro de uma tag
         /// </summary>
-        CommandArg = 10,
+        TagArg = 10,
 
         /// <summary>
         /// Inicio de um comentário
