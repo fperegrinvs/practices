@@ -53,7 +53,7 @@
         /// <summary>
         /// Fim da linha da especificação de parametros de uma tag
         /// </summary>
-        TagClosingArg = 9,
+        TagCloseArg = 9,
 
         /// <summary>
         /// Parâmetro de uma tag
