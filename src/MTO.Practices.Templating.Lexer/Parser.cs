@@ -145,7 +145,7 @@
                     var parts = token.Content.Split('=');
                     this.templateEngine.AddTagArg(parts[0], parts[1]);
                     break;
-                case Tokens.TagClosingArg:
+                case Tokens.TagCloseArg:
                     this.openTagArg = false;
                     return this.templateEngine.ProcessTag(string.Empty);
                 case Tokens.CloseMtoTag:

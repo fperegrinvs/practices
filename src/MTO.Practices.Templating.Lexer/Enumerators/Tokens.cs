@@ -74,5 +74,35 @@
         /// Identifica a url de um link
         /// </summary>
         Url = 13,
+
+        /// <summary>
+        /// Inicio de um comando
+        /// </summary>
+        OpenCommand = 14,
+        
+        /// <summary>
+        /// Finaliza (processa) um comando
+        /// </summary>
+        CloseCommand = 15,
+
+        /// <summary>
+        /// Inicia um comando
+        /// </summary>
+        OpenCommandArg = 16,
+
+        /// <summary>
+        /// Conteúdo de um comando
+        /// </summary>
+        OpenCommandContent = 17,
+
+        /// <summary>
+        /// Fim do conteúdo de um comando
+        /// </summary>
+        CloseCommandContent = 18,
+
+        /// <summary>
+        /// Inicio dos argumentos de um comando
+        /// </summary>
+        OpenComandArgValue = 18,
     }
 }

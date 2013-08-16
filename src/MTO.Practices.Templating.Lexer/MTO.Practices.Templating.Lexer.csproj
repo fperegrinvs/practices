@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Engine.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="Enumerators\TagStatusEnum.cs" />
     <Compile Include="GPlexBuffer.cs" />
