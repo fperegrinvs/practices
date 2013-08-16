@@ -20,41 +20,55 @@ StringSQ        \'([^\'\\]+(\\\')?)+\'
 %x TAG_NAME   //MTO Template Engine tag
 %x COMMENT   //MTO Template Engine tag
 %x URL
+%x COMMAND   // MTO Template Engine command
+%x COMMAND_ARG // argumento de comando
+%x COMMAND_ARG_NAME // nome de argumento de comando
+%x COMMAND_ARG_VALUE // valor do argumetno do comando
+%x COMMAND_CONTENT // conteúdo do comando (tipo em $url(/oi)$ é o /oi)
 
 %%
 %{
     // local variables
 %}
 
-<INITIAL>\<\!{Ident}+				{ this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>{EOL}     			{ this.AddToken(Tokens.NewLine, yytext); }
-<INITIAL,TAG>\$\{[A-Za-z_]+\}       { this.AddToken(Tokens.Property, yytext.Substring(2, yytext.Length -3)); }
-<INITIAL,TAG>\{[^\}]+\}         { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>[^\$<>\{\}]+       { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>\$                 { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>\<mto:              { this.AddToken(Tokens.OpenMtoTag, yytext); yy_push_state(TAG); yy_push_state(TAG_NAME); }
-<INITIAL,TAG>\<a[ \t]+[^h]*href[ \t]*=[\"\' ]? { this.AddToken(Tokens.Content, yytext); yy_push_state(URL); }
-<URL>\$\{[A-Z_]+\}				    { this.AddToken(Tokens.Property, yytext.Substring(2, yytext.Length -3)); yy_pop_state(); }
-<URL>[^ \"\'\{\$\}]+				{ this.AddToken(Tokens.Url, yytext); yy_pop_state(); }
-<TAG_NAME>[A-Za-z]+             { this.AddToken(Tokens.TagName, yytext); yy_pop_state(); yy_push_state(TAG_ARG); }
-<TAG_ARG>[ \t]+                 {  }
-<TAG_ARG>{Ident}={Ident}        { this.AddToken(Tokens.TagArg, yytext); }
-<TAG_ARG>{Ident}={StringSQ}     { this.AddToken(Tokens.TagArg, yytext); }
-<TAG_ARG>{Ident}={StringDQ}     { this.AddToken(Tokens.TagArg, yytext); }
-<TAG_ARG>\>                     { this.AddToken(Tokens.TagCloseArg, yytext); yy_pop_state(); }
-<TAG_ARG>/\>                    { this.AddToken(Tokens.CloseMtoTag, yytext); yy_pop_state(); yy_pop_state(); }
-<TAG>\/mto:[A-Za-z]+(\>)?            { this.AddToken(Tokens.CloseMtoTag, yytext.Substring(5, yytext.Length - 6)); yy_pop_state();}
-<TAG>\<\/mto:[A-Za-z]+(\>)?            { this.AddToken(Tokens.CloseMtoTag, yytext.Substring(6, yytext.Length - 7)); yy_pop_state();}
-<COMMENT>\-\-\>                     { this.AddToken(Tokens.TagEnd, yytext); yy_pop_state(); }
-<COMMENT>[^\-]+                     { this.AddToken(Tokens.Content, yytext); }
-<COMMENT>\-[^\-]+                   { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>\<\!\-\-           { this.AddToken(Tokens.CommentStart, yytext); yy_push_state(COMMENT); }
-<INITIAL,TAG>\<(\/)?[A-Za-tv-z][A-Za-z]+  { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>\<(\/)?u[A-Za-rt-z][A-Za-z]* { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>\<(\/)?[B-Zb-z][\t \>] { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>\<\/[Aa][\t \>] { this.AddToken(Tokens.Content, yytext); }
-<INITIAL,TAG>(\/)?\>   			{ this.AddToken(Tokens.CloseTag, yytext); }
-<<EOF>>                			 	{ this.AddToken(Tokens.EOF, yytext); }
+<INITIAL>\<\!{Ident}+									{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>{EOL}     									{ this.AddToken(Tokens.NewLine, yytext); }
+<INITIAL,TAG>\$\{[A-Za-z_]+\}       					{ this.AddToken(Tokens.Property, yytext.Substring(2, yytext.Length -3)); }
+<INITIAL,TAG>\{[^\}]+\}         						{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>[^\$<>\{\}]+       						{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>\$[ \t]*[0-9\.\(]+ 						{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>\<mto:              						{ this.AddToken(Tokens.OpenMtoTag, yytext); yy_push_state(TAG); yy_push_state(TAG_NAME); }
+<INITIAL,TAG>\<a[ \t]+[^h]*href[ \t]*=[\"\' ]? 			{ this.AddToken(Tokens.Content, yytext); yy_push_state(URL); }
+<URL>\$\{[A-Z_]+\}				    					{ this.AddToken(Tokens.Property, yytext.Substring(2, yytext.Length -3)); yy_pop_state(); }
+<URL>[^ \"\'\{\$\}]+									{ this.AddToken(Tokens.Url, yytext); yy_pop_state(); }
+<TAG_NAME>[A-Za-z]+             						{ this.AddToken(Tokens.TagName, yytext); yy_pop_state(); yy_push_state(TAG_ARG); }
+<TAG_ARG>[ \t]+                 						{  }
+<TAG_ARG>{Ident}={Ident}        						{ this.AddToken(Tokens.TagArg, yytext); }
+<TAG_ARG>{Ident}={StringSQ}     						{ this.AddToken(Tokens.TagArg, yytext); }
+<TAG_ARG>{Ident}={StringDQ}     						{ this.AddToken(Tokens.TagArg, yytext); }
+<TAG_ARG>\>                     						{ this.AddToken(Tokens.TagCloseArg, yytext); yy_pop_state(); }
+<TAG_ARG>/\>                    						{ this.AddToken(Tokens.CloseMtoTag, yytext); yy_pop_state(); yy_pop_state(); }
+<TAG>\/mto:[A-Za-z]+(\>)?           					{ this.AddToken(Tokens.CloseMtoTag, yytext.Substring(5, yytext.Length - 6)); yy_pop_state();}
+<TAG>\<\/mto:[A-Za-z]+(\>)?         					{ this.AddToken(Tokens.CloseMtoTag, yytext.Substring(6, yytext.Length - 7)); yy_pop_state();}
+<COMMENT>\-\-\>                     					{ this.AddToken(Tokens.TagEnd, yytext); yy_pop_state(); }
+<COMMENT>[^\-]+                     					{ this.AddToken(Tokens.Content, yytext); }
+<COMMENT>\-[^\-]+                   					{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>\<\!\-\-           						{ this.AddToken(Tokens.CommentStart, yytext); yy_push_state(COMMENT); }
+<INITIAL,TAG>\<(\/)?[A-Za-tv-z][A-Za-z]+  				{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>\<(\/)?u[A-Za-rt-z][A-Za-z]* 				{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>\<(\/)?[B-Zb-z][\t \>] 					{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>\<\/[Aa][\t \>] 							{ this.AddToken(Tokens.Content, yytext); }
+<INITIAL,TAG>(\/)?\>   									{ this.AddToken(Tokens.CloseTag, yytext); }
+<INITIAL,TAG,COMMAND,COMMAND_ARG_VALUE,COMMAND_CONTENT>\$[a-zA-Z]+ { this.AddToken(Tokens.OpenCommand, yytext.Substring(1, yytext.Length -1); yy_push_state(COMMAND); }
+<COMMAND>\.                         					{ this.AddToken(Tokens.OpenCommandArg); yy_push_state(COMMAND_ARG); yy_push_state(COMMAND_ARG_NAME); }
+<COMMAND>\$												{ this.AddTokens(Tokens.CloseCommand); yy_pop_state(); }
+<COMMAND>\(												{ this.AddTokens(Tokens.OpenCommandContent); yy_push_state(COMMAND_CONTENT); }
+<COMMAND_CONTENT>\)										{ this.AddTokens(Tokens.OpenCommandContent); yy_pop_state(); }
+<COMMAND_ARG_NAME>[a-zA-Z]+								{ this.AddToken(Tokens.Content, yytext); yy_pop_state(); yy_pop_state(); }
+<COMMAND_ARG>\(											{ yy_push_state(COMMAND_ARG_VALUE); }
+<COMMAND_ARG_VALUE,COMMAND_CONTENT>[^\)\$]+\)			{ this.AddToken(Tokens.Content, yytext.Substring(0, yytext.Length - 1)); yy_pop_state(); }
+<COMMAND_ARG_VALUE,COMMAND_CONTENT>\\\$					{ this.AddToken(Tokens.Content, "$"); }
+<<EOF>>                			 						{ this.AddToken(Tokens.EOF, yytext); }
 %%
 
      /// <summary>
