@@ -142,8 +142,7 @@
                     return this.templateEngine.EndComment(token.Content);
                 case Tokens.TagArg:
                     this.openTagArg = true;
-                    var parts = token.Content.Split('=');
-                    this.templateEngine.AddTagArg(parts[0], parts[1]);
+                    this.templateEngine.NewTagArg(token.Content);
                     break;
                 case Tokens.TagCloseArg:
                     this.openTagArg = false;
@@ -186,7 +185,7 @@
                     this.templateEngine.ProcessCommandContent();
                     break;
                 case Tokens.CloseCommand:
-                    return this.templateEngine.ProcessCommand();
+                    return this.ProcessToken(new PToken { Content = this.templateEngine.ProcessCommand(), State = (int)Tokens.Content });
             }
 
             return string.Empty;

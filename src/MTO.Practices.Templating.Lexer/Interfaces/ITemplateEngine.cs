@@ -49,11 +49,10 @@
         void NewTag(string tagName);
 
         /// <summary>
-        /// Adiciona novo parâmetro à tag atual
+        /// Inicia adição de novo parâmetro à tag atual
         /// </summary>
-        /// <param name="argument">nome do parâmetro</param>
-        /// <param name="value">valor do parâmetro</param>
-        void AddTagArg(string argument, string value);
+        /// <param name="name">nome do parâmetro</param>
+        void NewTagArg(string name);
 
         /// <summary>
         /// Finaliza tag atual

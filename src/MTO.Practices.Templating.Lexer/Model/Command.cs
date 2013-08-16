@@ -64,16 +64,6 @@
         }
 
         /// <summary>
-        /// Adiciona um novo argumetno
-        /// </summary>
-        /// <param name="name">Nome do argumento</param>
-        /// <param name="value">Valor do argumento</param>
-        public void AddArgument(string name, string value)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <summary>
         /// Inicia novo argumento quando nao sabemos nome nem valor
         /// </summary>
         public void StartArgument()

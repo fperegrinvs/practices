@@ -25,13 +25,6 @@
         string ProcessContent(string content);
 
         /// <summary>
-        /// Adiciona um novo argumetno
-        /// </summary>
-        /// <param name="name">Nome do argumento</param>
-        /// <param name="value">Valor do argumento</param>
-        void AddArgument(string name, string value);
-
-        /// <summary>
         /// Inicia novo argumento quando nao sabemos nome nem valor
         /// </summary>
         void StartArgument();

@@ -2,6 +2,7 @@
 {
     using System.Collections;
     using System.Collections.Generic;
+    using System.Linq;
 
     using MTO.Practices.Common.Serializers;
 
@@ -90,7 +91,14 @@
                 }
             }
 
-            this.tokens.Add(new PToken { Col = col, Content = content, Line = line, State = (int)state, Start = (int)start });
+            if (this.tokens.Any() && state == Tokens.Content && this.tokens.Last().State == (int)state)
+            {
+                this.tokens.Last().Content += content;
+            }
+            else
+            {
+                this.tokens.Add(new PToken { Col = col, Content = content, Line = line, State = (int)state, Start = (int)start });
+            }
         }
 
         /// <summary>
@@ -118,14 +126,17 @@
         /// <summary>
         /// Reune tags de conteúdo em tags mais genéricas
         /// </summary>
+        /// <param name="unminified">The unminified list</param>
         /// <returns>
         /// Lista com as tags após a minificação
         /// </returns>
-        public List<PToken> Minify()
+        public List<PToken> Minify(List<PToken> unminified = null)
         {
+            unminified = unminified ?? this.tokens;
+
             var current = (PToken)null;
             var minified = new List<PToken>(this.tokens.Count);
-            foreach (var token in this.tokens)
+            foreach (var token in unminified)
             {
                 if ((Tokens)token.State == Tokens.Content)
                 {

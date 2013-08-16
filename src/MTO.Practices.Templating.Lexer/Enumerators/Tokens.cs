@@ -104,5 +104,15 @@
         /// Inicio dos argumentos de um comando
         /// </summary>
         OpenComandArgValue = 19,
+
+        /// <summary>
+        /// Início do contexto de valor de atributo de tag
+        /// </summary>
+        TagArgValue = 20,
+
+        /// <summary>
+        /// Fechamento de argumento de tag
+        /// </summary>
+        CloseTagArg = 21,
     }
 }

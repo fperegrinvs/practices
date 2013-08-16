@@ -56,13 +56,13 @@
         }
 
         /// <summary>
-        /// Adiciona novo parâmetro aa tag atual
+        /// Inicia adição de novo parâmetro à tag atual
         /// </summary>
-        /// <param name="argument">nome do parâmetro</param>
-        /// <param name="value">valor do parâmetro</param>
-        public void AddTagArg(string argument, string value)
+        /// <param name="name">nome do parâmetro</param>
+        public void NewTagArg(string name)
         {
-            this.Stack.Peek().AddArgument(argument, value);
+            this.Stack.Peek().StartArgument();
+            this.ProcessContent(name);
         }
 
         /// <summary>

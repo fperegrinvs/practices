@@ -1,7 +1,9 @@
 ﻿namespace MTO.Practices.Templating.Lexer.Model
 {
+    using System;
     using System.Collections.Generic;
 
+    using MTO.Practices.Common;
     using MTO.Practices.Templating.Lexer.Enumerators;
     using MTO.Practices.Templating.Lexer.Interfaces;
 
@@ -20,7 +22,7 @@
         public Tag(string name)
         {
             this.Name = name;
-            this.Arguments = new Dictionary<string, string>();
+            this.Arguments = new Stack<KeyValue<string, string>>();
         }
 
         /// <summary>
@@ -36,7 +38,7 @@
         /// <summary>
         /// Parametros usados na tag
         /// </summary>
-        public Dictionary<string, string> Arguments { get; set; }
+        public Stack<KeyValue<string, string>> Arguments { get; set; }
 
         /// <summary>
         /// Processa conteúdo recebido durante o contexto de processamento do elemento
@@ -45,17 +47,22 @@
         /// <returns>O resultado</returns>
         public string ProcessContent(string content)
         {
-            return null;
-        }
+            if (this.Arguments.Count == 0)
+            {
+                return content;
+            }
 
-        /// <summary>
-        /// Adiciona um novo argumetno
-        /// </summary>
-        /// <param name="name">Nome do argumento</param>
-        /// <param name="value">Valor do argumento</param>
-        public void AddArgument(string name, string value)
-        {
-            this.Arguments.Add(name, value);
+            var arg = this.Arguments.Peek();
+            if (string.IsNullOrEmpty(arg.Key))
+            {
+                arg.Key = content;
+            }
+            else
+            {
+                arg.Value = content;
+            }
+
+            return null;
         }
 
         /// <summary>
@@ -63,7 +70,7 @@
         /// </summary>
         public void StartArgument()
         {
-            throw new System.NotImplementedException();
+            this.Arguments.Push(new KeyValue<string, string>());
         }
     }
 }

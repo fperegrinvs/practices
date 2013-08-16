@@ -15,10 +15,11 @@ Ident           [a-zA-Z_][a-zA-Z0-9_]*
 StringDQ		\"([^\"\\]+(\\\")?)+\"        
 StringSQ        \'([^\'\\]+(\\\')?)+\'
 
-%x TAG  //MTO Template Engine tag
-%x TAG_ARG   //MTO Template Engine tag
-%x TAG_NAME   //MTO Template Engine tag
-%x COMMENT   //MTO Template Engine tag
+%x TAG  // inicio de tag
+%x TAG_ARG   //argumento
+%x TAG_ARG_VALUE // valor da tag (pode ter subcomando e pa)
+%x TAG_NAME   //nome da tag
+%x COMMENT   //comentario
 %x URL
 %x COMMAND   // MTO Template Engine command
 %x COMMAND_ARG // argumento de comando
@@ -43,9 +44,11 @@ StringSQ        \'([^\'\\]+(\\\')?)+\'
 <URL>[^ \"\'\{\$\}]+									{ this.AddToken(Tokens.Url, yytext); yy_pop_state(); }
 <TAG_NAME>[A-Za-z]+             						{ this.AddToken(Tokens.TagName, yytext); yy_pop_state(); yy_push_state(TAG_ARG); }
 <TAG_ARG>[ \t]+                 						{  }
-<TAG_ARG>{Ident}={Ident}        						{ this.AddToken(Tokens.TagArg, yytext); }
-<TAG_ARG>{Ident}={StringSQ}     						{ this.AddToken(Tokens.TagArg, yytext); }
-<TAG_ARG>{Ident}={StringDQ}     						{ this.AddToken(Tokens.TagArg, yytext); }
+<TAG_ARG>{Ident}=[\"\']	        						{ var idx = yytext.IndexOf('='); this.AddToken(Tokens.TagArg, yytext.Remove(idx)); this.AddToken(Tokens.TagArgValue, yytext[idx+1].ToString()); yy_push_state(TAG_ARG_VALUE); }
+<TAG_ARG_VALUE>[^\'\"\\\$]+								{ this.AddToken(Tokens.Content, yytext); }
+<TAG_ARG_VALUE>\\[^\$\'\"]								{ this.AddToken(Tokens.Content, yytext); }
+<TAG_ARG_VALUE>\\[\$\'\"]								{ this.AddToken(Tokens.Content, yytext.Substring(1, 1)); }
+<TAG_ARG_VALUE>[\'\"]		     						{ this.AddToken(Tokens.CloseTagArg, yytext); yy_pop_state(); }
 <TAG_ARG>\>                     						{ this.AddToken(Tokens.TagCloseArg, yytext); yy_pop_state(); }
 <TAG_ARG>/\>                    						{ this.AddToken(Tokens.CloseMtoTag, yytext); yy_pop_state(); yy_pop_state(); }
 <TAG>\/mto:[A-Za-z]+(\>)?           					{ this.AddToken(Tokens.CloseMtoTag, yytext.Substring(5, yytext.Length - 6)); yy_pop_state();}
@@ -59,16 +62,17 @@ StringSQ        \'([^\'\\]+(\\\')?)+\'
 <INITIAL,TAG>\<(\/)?[B-Zb-z][\t \>] 					{ this.AddToken(Tokens.Content, yytext); }
 <INITIAL,TAG>\<\/[Aa][\t \>] 							{ this.AddToken(Tokens.Content, yytext); }
 <INITIAL,TAG>(\/)?\>   									{ this.AddToken(Tokens.CloseMtoTag, yytext); }
-<INITIAL,TAG,COMMAND,COMMAND_ARG_VALUE,COMMAND_CONTENT>\$[a-zA-Z]+ { this.AddToken(Tokens.OpenCommand, yytext.Substring(1, yytext.Length -1)); yy_push_state(COMMAND); }
+<INITIAL,TAG,COMMAND,COMMAND_ARG_VALUE,COMMAND_CONTENT,TAG_ARG_VALUE>\$[a-zA-Z]+ { this.AddToken(Tokens.OpenCommand, yytext.Substring(1, yytext.Length -1)); yy_push_state(COMMAND); }
 <COMMAND>\.                         					{ this.AddToken(Tokens.OpenCommandArg, yytext); yy_push_state(COMMAND_ARG); yy_push_state(COMMAND_ARG_NAME); }
 <COMMAND>\$												{ this.AddToken(Tokens.CloseCommand, yytext); yy_pop_state(); }
 <COMMAND>\(												{ this.AddToken(Tokens.OpenCommandContent, yytext); yy_push_state(COMMAND_CONTENT); }
 <COMMAND_ARG_NAME>[a-zA-Z]+								{ this.AddToken(Tokens.Content, yytext); yy_pop_state(); }
 <COMMAND_ARG>\(											{ this.AddToken(Tokens.OpenComandArgValue, yytext); yy_push_state(COMMAND_ARG_VALUE); }
-<COMMAND_ARG_VALUE,COMMAND_CONTENT>[^\)\$]+				{ this.AddToken(Tokens.Content, yytext); }
+<COMMAND_ARG_VALUE,COMMAND_CONTENT>[^\)\\\$]+			{ this.AddToken(Tokens.Content, yytext); }
+<COMMAND_ARG_VALUE,COMMAND_CONTENT>\\[^\$\)]			{ this.AddToken(Tokens.Content, yytext); }
+<COMMAND_ARG_VALUE,COMMAND_CONTENT>\\[\$\)]				{ this.AddToken(Tokens.Content, yytext.Substring(1, 1)); }
 <COMMAND_ARG_VALUE>\)									{ this.AddToken(Tokens.CloseCommandContent, yytext); yy_pop_state(); yy_pop_state(); }
 <COMMAND_CONTENT>\)										{ this.AddToken(Tokens.CloseCommandContent, yytext); yy_pop_state(); }
-<COMMAND_ARG_VALUE,COMMAND_CONTENT>\\\$					{ this.AddToken(Tokens.Content, "$"); }
 <<EOF>>                			 						{ this.AddToken(Tokens.EOF, yytext); }
 %%
 
