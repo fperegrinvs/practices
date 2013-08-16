@@ -1,0 +1,1 @@
+gplex.exe /out:..\..\src\MTO.Practices.Templating.Lexer\Engine.cs ..\..\src\MTO.Practices.Templating.Lexer\generator\Engine.lex

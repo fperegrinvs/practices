@@ -72,7 +72,9 @@
         /// <returns> O resultado do processamento do comando </returns>
         public override string ProcessCommand()
         {
-            return this.CurrentElement.ToJson();
+            var result = this.CurrentElement.ToJson();
+            Stack.Pop();
+            return result;
         }
 
         /// <summary>

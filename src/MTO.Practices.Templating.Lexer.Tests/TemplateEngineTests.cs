@@ -43,7 +43,20 @@ namespace MTO.Practices.Templating.Lexer.Tests
             var template = "oi $bundleCss.Add(/oi.css).AddMini(teste.css).Add(jiban.css)$ tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Name"":""bundleCss"",""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/oi.css""}]} tchau", parser.ProcessTokenList());
         }
+
+        [TestMethod]
+        public void ManyArgumentsMultiLine()
+        {
+            var template = @"oi $bundleCss.Add(/oi.css)
+                                            .AddMini(teste.css)
+                                            .Add(jiban.css)$ tchau";
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"oi {""Name"":""bundleCss"",""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/oi.css""}]} tchau", parser.ProcessTokenList());
+        }
+
+
     }
 }
