@@ -44,7 +44,7 @@ StringSQ        \'([^\'\\]+(\\\')?)+\'
 <URL>[^ \"\'\{\$\}]+									{ this.AddToken(Tokens.Url, yytext); yy_pop_state(); }
 <TAG_NAME>[A-Za-z]+             						{ this.AddToken(Tokens.TagName, yytext); yy_pop_state(); yy_push_state(TAG_ARG); }
 <TAG_ARG>[ \t]+                 						{  }
-<TAG_ARG>{Ident}=[\"\']	        						{ var idx = yytext.IndexOf('='); this.AddToken(Tokens.TagArg, yytext.Remove(idx)); this.AddToken(Tokens.TagArgValue, yytext[idx+1].ToString()); yy_push_state(TAG_ARG_VALUE); }
+<TAG_ARG>{Ident}=[\"\']	        						{ var idx = yytext.IndexOf('='); this.AddToken(Tokens.TagArg, yytext.Remove(idx)); yy_push_state(TAG_ARG_VALUE); }
 <TAG_ARG_VALUE>[^\'\"\\\$]+								{ this.AddToken(Tokens.Content, yytext); }
 <TAG_ARG_VALUE>\\[^\$\'\"]								{ this.AddToken(Tokens.Content, yytext); }
 <TAG_ARG_VALUE>\\[\$\'\"]								{ this.AddToken(Tokens.Content, yytext.Substring(1, 1)); }

@@ -11,13 +11,11 @@
         /// <summary>
         /// Estado do token
         /// </summary>
-        [DataMember(Name = "STT")]
         public int State { get; set; }
 
         /// <summary>
         /// Conteúdo do token
         /// </summary>
-        [DataMember(Name = "CON")]
         public string Content { get; set; }
 
         /// <summary>
@@ -33,7 +31,6 @@
         /// <summary>
         /// Ponto de partida do token (estado)
         /// </summary>
-        [DataMember(Name = "STR")]
         public int Start { get; set; }
     }
 }

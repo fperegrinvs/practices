@@ -55,6 +55,7 @@
     <Compile Include="TemplateEngineBase.cs" />
     <Compile Include="TokenList.cs" />
     <Compile Include="Enumerators\Tokens.cs" />
+    <Compile Include="TokenListSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MTO.Practices.Common\MTO.Practices.Common.csproj">

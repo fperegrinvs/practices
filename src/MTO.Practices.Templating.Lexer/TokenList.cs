@@ -76,21 +76,6 @@
         /// </param>
         public void Add(Tokens state, string content, int line, int col, StartEnum start)
         {
-            if (state == Tokens.TagArg)
-            {
-                var elms = content.Split('=');
-                if (elms.Length == 2 && !string.IsNullOrEmpty(elms[1]))
-                {
-                    switch (elms[1][0])
-                    {
-                        case '\'':
-                        case '"':
-                            content = elms[0] + "=" + elms[1].Substring(1, elms[1].Length - 2);
-                            break;
-                    }
-                }
-            }
-
             if (this.tokens.Any() && state == Tokens.Content && this.tokens.Last().State == (int)state)
             {
                 this.tokens.Last().Content += content;
@@ -102,16 +87,6 @@
         }
 
         /// <summary>
-        /// Serializa tokens
-        /// </summary>
-        /// <returns>string com os tokens serializados</returns>
-        public string Serialize()
-        {
-            return JsonSerializer.Serialize(this.Minify());
-        }
-
-
-        /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
@@ -121,52 +96,6 @@
         public IEnumerator<PToken> GetEnumerator()
         {
             return this.tokens.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Reune tags de conteúdo em tags mais genéricas
-        /// </summary>
-        /// <param name="unminified">The unminified list</param>
-        /// <returns>
-        /// Lista com as tags após a minificação
-        /// </returns>
-        public List<PToken> Minify(List<PToken> unminified = null)
-        {
-            unminified = unminified ?? this.tokens;
-
-            var current = (PToken)null;
-            var minified = new List<PToken>(this.tokens.Count);
-            foreach (var token in unminified)
-            {
-                if ((Tokens)token.State == Tokens.Content)
-                {
-                    if (current == null)
-                    {
-                        current = token;
-                    }
-                    else
-                    {
-                        current.Content = current.Content + token.Content;
-                    }
-                }
-                else
-                {
-                    if (current != null)
-                    {
-                        minified.Add(current);
-                        current = null;
-                    }
-
-                    minified.Add(token);
-                }
-            }
-
-            if (current != null)
-            {
-                minified.Add(current);
-            }
-
-            return minified;
         }
             
         /// <summary>
