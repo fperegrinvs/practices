@@ -125,5 +125,52 @@ namespace MTO.Practices.Templating.Lexer.Tests
 
             Assert.AreEqual(@"oi Bom dia tchau", parser.ProcessTokenList());
         }
+
+        [TestMethod]
+        public void NumberInsideTag()
+        {
+            var template = "<mto:upper>Computador R$ 3000</mto:upper>";
+
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"COMPUTADOR R$ 3000", parser.ProcessTokenList());
+        }
+
+        [TestMethod]
+        public void JqueryInsideTag()
+        {
+            var template = "<mto:upper>$('.classe')</mto:upper>.show();";
+
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"$('.CLASSE').show();", parser.ProcessTokenList());
+        }
+
+        /// <summary>
+        /// Teste da funcionalidade de skip
+        /// </summary>
+        [TestMethod]
+        public void TagSkip()
+        {
+            var template = "oi <mto:skip>erro</mto:skip> tchau";
+
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"oi  tchau", parser.ProcessTokenList());
+        }
+
+        /// <summary>
+        /// Teste da funcionalidade de dump
+        /// </summary>
+        [TestMethod]
+        public void TagDump()
+        {
+            var template = "oi <mto:dump><mto:upper>erro</mto:upper> bom dia</mto:dump> tchau";
+
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"oi <mto:upper>erro</mto:upper> bom dia tchau", parser.ProcessTokenList());
+        }
+
     }
 }

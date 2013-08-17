@@ -51,8 +51,8 @@ StringSQ        \'([^\'\\]+(\\\')?)+\'
 <TAG_ARG_VALUE>[\'\"]		     						{ this.AddToken(Tokens.CloseTagArg, yytext); yy_pop_state(); }
 <TAG_ARG>\>                     						{ this.AddToken(Tokens.TagCloseArg, yytext); yy_pop_state(); }
 <TAG_ARG>/\>                    						{ this.AddToken(Tokens.CloseMtoTag, yytext); yy_pop_state(); yy_pop_state(); }
-<TAG>\/mto:[A-Za-z]+(\>)?           					{ this.AddToken(Tokens.CloseMtoTag, yytext.Substring(5, yytext.Length - 6)); yy_pop_state();}
-<TAG>\<\/mto:[A-Za-z]+(\>)?         					{ this.AddToken(Tokens.CloseMtoTag, yytext.Substring(6, yytext.Length - 7)); yy_pop_state();}
+<TAG>\/mto:[A-Za-z]+(\>)?           					{ this.AddToken(Tokens.CloseMtoTag, "</" + yytext); yy_pop_state();}
+<TAG>\<\/mto:[A-Za-z]+(\>)?         					{ this.AddToken(Tokens.CloseMtoTag, yytext); yy_pop_state();}
 <COMMENT>\-\-\>                     					{ this.AddToken(Tokens.CommentEnd, yytext); yy_pop_state(); }
 <COMMENT>[^\-]+                     					{ this.AddToken(Tokens.Content, yytext); }
 <COMMENT>\-[^\-]+                   					{ this.AddToken(Tokens.Content, yytext); }

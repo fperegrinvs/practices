@@ -70,7 +70,7 @@
             while (iter.MoveNext())
             {
                 var level = 1;
-                while (this.templateEngine.CurrentElement != null && this.templateEngine.CurrentElement.ElementStatus != ElementStatusEnum.Default)
+                while (iter.Current != null && this.templateEngine.CurrentElement != null && this.templateEngine.CurrentElement.ElementStatus != ElementStatusEnum.Default)
                 {
                     // registra a tag atual
                     if (tagName == string.Empty)
@@ -84,7 +84,7 @@
                     }
 
                     // fim da tag
-                    if (iter.Current.State == (int)Tokens.CloseMtoTag && tagName == iter.Current.Content && --level == 0)
+                    if (iter.Current.State == (int)Tokens.CloseMtoTag && iter.Current.Content.Length > 3 && iter.Current.Content.Contains(tagName) && --level == 0)
                     {
                         tagName = string.Empty;
                         break;
@@ -106,6 +106,11 @@
                     }
 
                     iter.MoveNext();
+                }
+
+                if (iter.Current == null)
+                {
+                    break;
                 }
 
                 var tokenResult = this.ProcessToken(iter.Current);

@@ -5,6 +5,7 @@
     using System.Linq;
 
     using MTO.Practices.Common.Extensions;
+    using MTO.Practices.Templating.Lexer.Enumerators;
 
     /// <summary>
     /// Engine de renderização pra testes
@@ -55,7 +56,10 @@
             switch (commandName)
             {
                 case "reverse":
-                    result = string.Join("", this.Stack.Peek().Content.Reverse());
+                    result = string.Join("", this.CurrentElement.Content.Reverse());
+                    break;
+                case "upper":
+                    result = this.CurrentElement.Content.ToUpperInvariant();
                     break;
                 default:
                     result = this.Stack.Peek().Content;
@@ -86,8 +90,18 @@
             string result;
             switch (this.CurrentElement.Name)
             {
+                // comandos que operam no conteúdo
+                case "upper":
                 case "reverse":
                     result = "";
+                    break;
+                case "skip":
+                    result = "";
+                    this.CurrentElement.ElementStatus = ElementStatusEnum.SkipContent;
+                    break;
+                case "dump":
+                    result = "";
+                    this.CurrentElement.ElementStatus = ElementStatusEnum.DumpContent;
                     break;
                 default:
                     result = this.CurrentElement.ToJson();
