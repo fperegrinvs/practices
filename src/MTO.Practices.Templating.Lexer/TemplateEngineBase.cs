@@ -2,7 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Diagnostics;
-    using System.Text;
 
     using MTO.Practices.Templating.Lexer.Interfaces;
     using MTO.Practices.Templating.Lexer.Model;
@@ -17,7 +16,7 @@
         /// </summary>
         public TemplateEngineBase()
         {
-            this.Stack = new Stack<ITemplateElement>();
+            this.Stack = new Stack<Element>();
         }
 
         /// <summary>
@@ -33,7 +32,7 @@
         /// <summary>
         /// Tag atual
         /// </summary>
-        public ITemplateElement CurrentElement
+        public Element CurrentElement
         {
             get
             {
@@ -44,7 +43,7 @@
         /// <summary>
         /// Pilha de elementos do template durante o processamento
         /// </summary>
-        protected Stack<ITemplateElement> Stack { get; set; }
+        protected Stack<Element> Stack { get; set; }
 
         /// <summary>
         /// Adiciona nova tag à pilha de Tags
@@ -52,7 +51,7 @@
         /// <param name="tagName">nome da tag</param>
         public void NewTag(string tagName)
         {
-            this.Stack.Push(new Tag(tagName));
+            this.Stack.Push(new Element(tagName));
         }
 
         /// <summary>
@@ -73,7 +72,7 @@
         /// </returns>
         public virtual string EndTag()
         {
-            Debug.Assert(this.Stack.Peek() is Tag, "Tentando fechar tag quando o elemento do topo da pilha não é uma tag.");
+            Debug.Assert(this.Stack.Peek() is Element, "Tentando fechar tag quando o elemento do topo da pilha não é uma tag.");
             this.Stack.Pop();
             return string.Empty;
         }
@@ -128,11 +127,7 @@
         /// </summary>
         /// <param name="content">conteúdo relacionado à tag</param>
         /// <returns>conteúdo processado</returns>
-        public virtual string ProcessTag(string content)
-        {
-            // aqui processa as tags dos plugins e td mais
-            return content;
-        }
+        public abstract string ProcessTag(string content);
 
         /// <summary>
         /// Processa outro tipo de token
@@ -168,7 +163,7 @@
         /// <param name="name">Nome do novo comando</param>
         public virtual void NewCommand(string name)
         {
-            this.Stack.Push(new Command(name));
+            this.Stack.Push(new Element(name));
         }
 
         /// <summary>
@@ -197,13 +192,7 @@
         /// Processa o comando
         /// </summary>
         /// <returns> O resultado do processamento do comando </returns>
-        public virtual string ProcessCommand()
-        {
-            // aqui processa os comandos dos plugins e td mais
-            this.Stack.Pop();
-
-            return ""; // retornar o conteúdoa qui
-        }
+        public abstract string ProcessCommand();
 
         /// <summary>
         /// Inicio de comentário

@@ -4,21 +4,20 @@
 
     using MTO.Practices.Common;
     using MTO.Practices.Templating.Lexer.Enumerators;
-    using MTO.Practices.Templating.Lexer.Interfaces;
 
     /// <summary>
     /// Tag incluso no template
     /// </summary>
-    public class Tag : ITemplateElement
+    public class Element
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Tag"/> class. 
+        /// Initializes a new instance of the <see cref="Element"/> class. 
         /// Cria nova tag
         /// </summary>
         /// <param name="name">
         /// Nome da tag
         /// </param>
-        public Tag(string name)
+        public Element(string name)
         {
             this.Name = name;
             this.Arguments = new Stack<KeyValue<string, string>>();

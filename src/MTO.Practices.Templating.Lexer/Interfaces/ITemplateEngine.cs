@@ -1,5 +1,7 @@
 ﻿namespace MTO.Practices.Templating.Lexer.Interfaces
 {
+    using MTO.Practices.Templating.Lexer.Model;
+
     /// <summary>
     /// Contrato para processamento de templates
     /// </summary>
@@ -18,7 +20,7 @@
         /// <summary>
         /// tag atual
         /// </summary>
-        ITemplateElement CurrentElement { get; }
+        Element CurrentElement { get; }
 
         /// <summary>
         /// Inicio de comentário

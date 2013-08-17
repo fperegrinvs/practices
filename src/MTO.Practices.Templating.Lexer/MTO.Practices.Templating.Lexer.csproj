@@ -42,9 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Engine.cs" />
-    <Compile Include="Interfaces\ITemplateElement.cs" />
-    <Compile Include="Model\Command.cs" />
-    <Compile Include="Model\Tag.cs" />
+    <Compile Include="Model\Element.cs" />
     <Compile Include="Enumerators\ElementStatusEnum.cs" />
     <Compile Include="GPlexBuffer.cs" />
     <Compile Include="Interfaces\ITemplateEngine.cs" />
