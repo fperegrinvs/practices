@@ -107,8 +107,21 @@
                 return content;
             }
 
+            if (this.Stack.Peek().IsActive)
+            {
+                return this.ProcessTagContent(content, token);
+            }
+
             return this.Stack.Peek().ProcessContent(content) ?? "";
         }
+
+        /// <summary>
+        /// Processa conteúdo da tag
+        /// </summary>
+        /// <param name="content">conteúdo a ser processado</param>
+        /// <param name="token">token atual</param>
+        /// <returns>resultado do processamento</returns>
+        public abstract string ProcessTagContent(string content, Tokens? token = null);
 
         /// <summary>
         /// Processa tag e retorna o seu resultado

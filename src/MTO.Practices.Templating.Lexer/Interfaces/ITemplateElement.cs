@@ -13,6 +13,11 @@
         string Name { get; set; }
 
         /// <summary>
+        /// Indica se o elemento está ativo.
+        /// </summary>
+        bool IsActive { get; set; }
+
+        /// <summary>
         /// Estado atual da tag
         /// </summary>
         ElementStatusEnum ElementStatus { get; set; }

@@ -2,11 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Globalization;
+    using System.Linq;
 
     using MTO.Practices.Common.Extensions;
-    using MTO.Practices.Templating.Lexer.Enumerators;
-    using MTO.Practices.Templating.Lexer.Interfaces;
 
     /// <summary>
     /// Engine de renderização pra testes
@@ -17,16 +15,6 @@
         /// índice do elemento atual
         /// </summary>
         private int elementIndex = -1;
-
-        /// <summary>
-        /// Indícce máximo processado até o momento
-        /// </summary>
-        private int maxIndex = -1;
-
-        /// <summary>
-        /// Primeiro elemento a ser processado
-        /// </summary>
-        private int minIndex;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestEngine"/> class.
@@ -57,12 +45,31 @@
         }
 
         /// <summary>
+        /// Processa conteúdo da tag
+        /// </summary>
+        /// <param name="content">conteúdo a ser processado</param>
+        /// <param name="token">token atual</param>
+        /// <returns>resultado do processamento</returns>
+        public override string ProcessTagContent(string content, Tokens? token = null)
+        {
+            var commandName = this.Stack.Peek().Name;
+            switch (commandName)
+            {
+                case "reverse":
+                    return string.Join("", content.Reverse());
+            }
+
+            return content;
+        }
+
+        /// <summary>
         /// Processa comando e retorna o seu resultado
         /// </summary>
         /// <param name="content">conteúdo relacionado ao comando</param>
         /// <returns>conteúdo processado</returns>
         public override string ProcessTag(string content)
         {
+            this.Stack.Peek().IsActive = true;
             return this.CurrentElement.ToJson();
         }
 
@@ -93,7 +100,6 @@
         public void EOF()
         {
             // Avança a página
-            this.minIndex = this.maxIndex + 1;
             this.elementIndex = -1;
             this.Parser.ProcessTokenList();
         }

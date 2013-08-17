@@ -29,6 +29,11 @@
         public string Name { get; set; }
 
         /// <summary>
+        /// Indica se o elemento está ativo.
+        /// </summary>
+        public bool IsActive { get; set; }
+
+        /// <summary>
         /// Estado atual do comando
         /// </summary>
         public ElementStatusEnum ElementStatus { get; set; }

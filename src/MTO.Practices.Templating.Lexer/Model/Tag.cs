@@ -1,6 +1,5 @@
 ﻿namespace MTO.Practices.Templating.Lexer.Model
 {
-    using System;
     using System.Collections.Generic;
 
     using MTO.Practices.Common;
@@ -26,9 +25,19 @@
         }
 
         /// <summary>
+        /// Indica se um argumento está sendo processado
+        /// </summary>
+        private bool isArgumentOpen;
+
+        /// <summary>
         /// Nome da tag
         /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// Indica se o elemento está ativo.
+        /// </summary>
+        public bool IsActive { get; set; }
 
         /// <summary>
         /// Estado atual da tag
@@ -47,7 +56,7 @@
         /// <returns>O resultado</returns>
         public string ProcessContent(string content)
         {
-            if (this.Arguments.Count == 0)
+            if (!this.isArgumentOpen)
             {
                 return content;
             }
@@ -60,6 +69,7 @@
             else
             {
                 arg.Value = content;
+                this.isArgumentOpen = false;
             }
 
             return null;
@@ -71,6 +81,7 @@
         public void StartArgument()
         {
             this.Arguments.Push(new KeyValue<string, string>());
+            this.isArgumentOpen = true;
         }
     }
 }
