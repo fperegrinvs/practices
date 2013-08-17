@@ -25,7 +25,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
 
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""jaspion"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[{""Key"":""argumento"",""Value"":""oi""}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""jaspion"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[{""Key"":""argumento"",""Value"":""oi""}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -34,7 +34,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
             var template = "oi $jiraya(ServerName)$ tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""jiraya"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""ServerName"",""Value"":null}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""jiraya"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""ServerName"",""Value"":null}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
             var template = "oi $bundleCss.Add(/oi.css).AddMini(teste.css).Add(jiban.css)$ tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""bundleCss"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/oi.css""}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""bundleCss"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/oi.css""}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -54,7 +54,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
                                             .Add(jiban.css)$ tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""bundleCss"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/oi.css""}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""bundleCss"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/oi.css""}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -65,7 +65,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
                                             .Add(jiban.css)$ tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""bundleCss"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/$oi.css""}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""bundleCss"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""Add"",""Value"":""jiban.css""},{""Key"":""AddMini"",""Value"":""teste.css""},{""Key"":""Add"",""Value"":""/$oi.css""}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
             var template = "oi $jiraya($manabu(ServerName)$)$ tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""jiraya"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""{\""Name\"":\""manabu\"",\""IsActive\"":false,\""ElementStatus\"":0,\""Arguments\"":[{\""Key\"":\""ServerName\"",\""Value\"":null}]}"",""Value"":null}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""jiraya"",""IsActive"":false,""ElementStatus"":0,""Arguments"":[{""Key"":""{\""Content\"":null,\""Name\"":\""manabu\"",\""IsActive\"":false,\""ElementStatus\"":0,\""Arguments\"":[{\""Key\"":\""ServerName\"",\""Value\"":null}]}"",""Value"":null}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -83,7 +83,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
             var template = "oi <mto:jiraya whatever=\"$manabu(ServerName)$\" /> tchau";
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""jiraya"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[{""Key"":""whatever"",""Value"":""{\""Name\"":\""manabu\"",\""IsActive\"":false,\""ElementStatus\"":0,\""Arguments\"":[{\""Key\"":\""ServerName\"",\""Value\"":null}]}""}]} tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""jiraya"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[{""Key"":""whatever"",""Value"":""{\""Content\"":null,\""Name\"":\""manabu\"",\""IsActive\"":false,\""ElementStatus\"":0,\""Arguments\"":[{\""Key\"":\""ServerName\"",\""Value\"":null}]}""}]} tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -93,7 +93,7 @@ namespace MTO.Practices.Templating.Lexer.Tests
 
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""teste"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[]} bom dia  tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi {""Content"":null,""Name"":""teste"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[]} bom dia  tchau", parser.ProcessTokenList());
         }
 
         [TestMethod]
@@ -103,7 +103,27 @@ namespace MTO.Practices.Templating.Lexer.Tests
 
             var parser = new Parser(Scanner.ParseString(template), new TestEngine());
 
-            Assert.AreEqual(@"oi {""Name"":""reverse"",""IsActive"":true,""ElementStatus"":0,""Arguments"":[]} }]}llun:""eulaV"",""aid"":""yeK""{[:""stnemugrA"",0:""sutatStnemelE"",eslaf:""evitcAsI"",""mob"":""emaN""{  tchau", parser.ProcessTokenList());
+            Assert.AreEqual(@"oi  }]}llun:""eulaV"",""aid"":""yeK""{[:""stnemugrA"",0:""sutatStnemelE"",eslaf:""evitcAsI"",""mob"":""emaN"",llun:""tnetnoC""{  tchau", parser.ProcessTokenList());
+        }
+
+        [TestMethod]
+        public void TagContent()
+        {
+            var template = "oi <mto:reverse>Bom dia</mto:reverse> tchau";
+
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"oi aid moB tchau", parser.ProcessTokenList());
+        }
+
+        [TestMethod]
+        public void NestedTag()
+        {
+            var template = "<mto:reverse>uahct <mto:reverse>Bom dia</mto:reverse> io</mto:reverse>";
+
+            var parser = new Parser(Scanner.ParseString(template), new TestEngine());
+
+            Assert.AreEqual(@"oi Bom dia tchau", parser.ProcessTokenList());
         }
     }
 }

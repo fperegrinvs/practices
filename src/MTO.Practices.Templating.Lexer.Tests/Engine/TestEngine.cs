@@ -47,19 +47,31 @@
         /// <summary>
         /// Processa conteúdo da tag
         /// </summary>
-        /// <param name="content">conteúdo a ser processado</param>
-        /// <param name="token">token atual</param>
         /// <returns>resultado do processamento</returns>
-        public override string ProcessTagContent(string content, Tokens? token = null)
+        public override string ProcessTagContent()
         {
             var commandName = this.Stack.Peek().Name;
+            string result;
             switch (commandName)
             {
                 case "reverse":
-                    return string.Join("", content.Reverse());
+                    result = string.Join("", this.Stack.Peek().Content.Reverse());
+                    break;
+                default:
+                    result = this.Stack.Peek().Content;
+                    break;
             }
 
-            return content;
+            this.Stack.Pop();
+
+            // se tenho stack, passo o resultado da tag para a tag mãe
+            if (this.Stack.Count > 0)
+            {
+                this.Stack.Peek().Content += result;
+                return "";
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -70,7 +82,19 @@
         public override string ProcessTag(string content)
         {
             this.Stack.Peek().IsActive = true;
-            return this.CurrentElement.ToJson();
+
+            string result;
+            switch (this.CurrentElement.Name)
+            {
+                case "reverse":
+                    result = "";
+                    break;
+                default:
+                    result = this.CurrentElement.ToJson();
+                    break;
+            }
+
+            return result;
         }
 
         /// <summary>

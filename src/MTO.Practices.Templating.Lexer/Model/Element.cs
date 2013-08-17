@@ -29,6 +29,11 @@
         private bool isArgumentOpen;
 
         /// <summary>
+        /// Conteúdo da tag
+        /// </summary>
+        public string Content { get; set; }
+
+        /// <summary>
         /// Nome da tag
         /// </summary>
         public string Name { get; set; }

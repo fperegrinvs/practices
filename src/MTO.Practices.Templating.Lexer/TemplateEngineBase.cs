@@ -1,7 +1,6 @@
 ﻿namespace MTO.Practices.Templating.Lexer
 {
     using System.Collections.Generic;
-    using System.Diagnostics;
 
     using MTO.Practices.Templating.Lexer.Interfaces;
     using MTO.Practices.Templating.Lexer.Model;
@@ -14,7 +13,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="TemplateEngineBase"/> class.
         /// </summary>
-        public TemplateEngineBase()
+        protected TemplateEngineBase()
         {
             this.Stack = new Stack<Element>();
         }
@@ -72,7 +71,6 @@
         /// </returns>
         public virtual string EndTag()
         {
-            Debug.Assert(this.Stack.Peek() is Element, "Tentando fechar tag quando o elemento do topo da pilha não é uma tag.");
             this.Stack.Pop();
             return string.Empty;
         }
@@ -108,7 +106,8 @@
 
             if (this.Stack.Peek().IsActive)
             {
-                return this.ProcessTagContent(content, token);
+                this.Stack.Peek().Content += content;
+                return "";
             }
 
             return this.Stack.Peek().ProcessContent(content) ?? "";
@@ -117,10 +116,8 @@
         /// <summary>
         /// Processa conteúdo da tag
         /// </summary>
-        /// <param name="content">conteúdo a ser processado</param>
-        /// <param name="token">token atual</param>
         /// <returns>resultado do processamento</returns>
-        public abstract string ProcessTagContent(string content, Tokens? token = null);
+        public abstract string ProcessTagContent();
 
         /// <summary>
         /// Processa tag e retorna o seu resultado

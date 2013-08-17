@@ -86,6 +86,12 @@
         string ProcessContent(string content, Tokens? token = null);
 
         /// <summary>
+        /// Processa conteúdo da tag
+        /// </summary>
+        /// <returns>resultado do processamento</returns>
+        string ProcessTagContent();
+
+        /// <summary>
         /// Processa tag e retorna o seu resultado
         /// </summary>
         /// <param name="content">conteúdo relacionado à tag</param>

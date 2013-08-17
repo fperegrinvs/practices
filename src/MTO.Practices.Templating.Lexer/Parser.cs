@@ -158,7 +158,7 @@
                         }
                     }
 
-                    return this.templateEngine.EndTag();
+                    return this.templateEngine.ProcessTagContent();
                 case Tokens.TagName:
                     this.templateEngine.NewTag(token.Content);
                     break;
