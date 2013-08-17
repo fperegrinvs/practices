@@ -22,6 +22,7 @@
                     new Pacote { Id = "geolocation", Name = "Geolocation" },
                     new Pacote { Id = "elmah", Name = "Logging.Elmah" },
                     new Pacote { Id = "minify", Name = "Minify" },
+                    new Pacote { Id = "lexertemplate", Name = "Templating.Lexer" },
                     new Pacote { Id = "stringtemplate", Name = "Templating.StringTemplate" },
                     new Pacote { Id = "valueinjector", Name = "ValueInjector" },
                     new Pacote { Id = "mvc", Name = "Web.Mvc" },

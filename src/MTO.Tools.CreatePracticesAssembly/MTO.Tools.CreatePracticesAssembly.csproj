@@ -170,6 +170,10 @@
       <Project>{8e7db4ab-d8dd-44aa-b5dc-3d24c76f9a21}</Project>
       <Name>MTO.Practices.Minify</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MTO.Practices.Templating.Lexer\MTO.Practices.Templating.Lexer.csproj">
+      <Project>{6cc52667-abb5-4ac7-bd95-069e4434e037}</Project>
+      <Name>MTO.Practices.Templating.Lexer</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTO.Practices.Templating.StringTemplate\MTO.Practices.Templating.StringTemplate.csproj">
       <Project>{22f9b090-3a65-408a-b088-831d3a444544}</Project>
       <Name>MTO.Practices.Templating.StringTemplate</Name>
