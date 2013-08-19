@@ -1,6 +1,7 @@
 ﻿namespace MTO.Practices.WebModule
 {
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     /// The menu item.
@@ -26,6 +27,7 @@
         {
             this.Title = title;
             this.Action = new ActionReference(controllerName, actionName, area);
+            this.Items = new List<MenuItem>();
         }
 
         /// <summary>
@@ -47,5 +49,11 @@
         /// Função para validar permissão de um item do menu
         /// </summary>
         public Func<bool> PermissionFunction { get; set; }
+
+        /// <summary>
+        /// Gets the items.
+        /// </summary>
+        public List<MenuItem> Items { get; private set; }
+
     }
 }
