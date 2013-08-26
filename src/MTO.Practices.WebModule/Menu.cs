@@ -22,14 +22,28 @@
         /// <param name="area">
         /// Área da action
         /// </param>
-        public Menu(string title, string controllerName, string actionName, string area = "") : base(title, controllerName, actionName, area)
+        public Menu(string title, string controllerName, string actionName, string area = "") 
+            : base(title, controllerName, actionName, area)
         {
-            this.Items = new List<MenuItem>();
+            this.IsFloatLeft = true;
+        }
+
+        public Menu(string title, string controllerName, string actionName)
+            : base(title, controllerName, actionName, "")
+        {
+            this.IsFloatLeft = true;
+        }
+
+        public Menu(string title, string controllerName, string actionName, bool isFloatLeft = true, string area = "")
+            : base(title, controllerName, actionName, area)
+        {
+            this.IsFloatLeft = isFloatLeft;
         }
 
         /// <summary>
-        /// Gets the items.
+        /// Informa se o menu será fluido a direita
         /// </summary>
-        public List<MenuItem> Items { get; private set; } 
+        public bool IsFloatLeft { get; set; }
+
     }
 }
