@@ -51,6 +51,7 @@
             var input = (from p in pacotes select path + "MTO.Practices." + p.Name + ".dll").ToArray();
             merge.SetInputAssemblies(input);
             merge.OutputFile = Server.MapPath("/tmp/") + "MTO.Practices.dll";
+            merge.SetTargetPlatform("v4", @"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.0");
             merge.Merge();
 
             return File(merge.OutputFile, System.Net.Mime.MediaTypeNames.Application.Octet, Path.GetFileName(merge.OutputFile));

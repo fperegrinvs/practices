@@ -1,7 +1,5 @@
 ﻿namespace MTO.Practices.WebModule
 {
-    using System.Collections.Generic;
-
     /// <summary>
     /// Menu de navegação
     /// </summary>
