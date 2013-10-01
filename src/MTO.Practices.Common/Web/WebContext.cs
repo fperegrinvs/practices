@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Security.Authentication;
     using System.Web;
     using System.Web.Helpers;
@@ -124,7 +125,19 @@
         /// <returns>Perfil do usuário logado</returns>
         public string GetUserProfile()
         {
-            return this.Get<string>("UserProfile");
+            var identity = HttpContext.Current.User.Identity;
+            if (!identity.IsAuthenticated)
+            {
+                throw new AuthenticationException("Usuário não autenticado.");
+            }
+
+            var parts = identity.Name.Split('_');
+            if (parts.Length == 3)
+            {
+                return parts[1];
+            }
+
+            throw new InvalidCredentialException("Contexto de autenticação corrompido.");
         }
 
         /// <summary>
@@ -141,7 +154,7 @@
 
             if (identity.Name.Contains("_"))
             {
-                return identity.Name.Split('_')[1];
+                return identity.Name.Split('_').Last();
             }
 
             throw new InvalidCredentialException("Contexto de autenticação corrompido.");
@@ -180,9 +193,12 @@
         {
             const int CookieExpiration = 8;
 
+            var profile = userProfile == null ? "" : userProfile + "_";
+
+
             // Usar com [AuthorizeActivity(new[] { ControllerActivityEnum.ActivityName })] na ação do controller.
             var authTicket = new FormsAuthenticationTicket(
-                userId + "_" + userProfile + "_" + userName, // user name
+                userId + "_" + profile + userName, // user name
                 true, // is persistent?
                 CookieExpiration * 60); // timeout in minutes
 
