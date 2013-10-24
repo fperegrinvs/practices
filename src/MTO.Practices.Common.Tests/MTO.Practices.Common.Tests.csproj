@@ -83,8 +83,17 @@
     <Compile Include="TemplateBuilderTests.cs" />
     <Compile Include="ThreadContextTests.cs" />
     <Compile Include="CreditCardValidationTests.cs" />
+    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MTO.Practices.Common.Funq\MTO.Practices.Common.Funq.csproj">
+      <Project>{0348E6FD-E3F3-4730-B4D5-BB4E21F36B36}</Project>
+      <Name>MTO.Practices.Common.Funq</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MTO.Practices.Common.Unity\MTO.Practices.Common.Unity.csproj">
+      <Project>{7E363460-4917-4EAC-9042-78790CA999FD}</Project>
+      <Name>MTO.Practices.Common.Unity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MTO.Practices.Common\MTO.Practices.Common.csproj">
       <Project>{2E3C8B7E-EE5E-4172-B55B-FD21B5612F95}</Project>
       <Name>MTO.Practices.Common</Name>

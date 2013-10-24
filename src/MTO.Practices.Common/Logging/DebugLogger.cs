@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
 
     using MTO.Practices.Common.Enumerators;
     using MTO.Practices.Common.Extensions;
@@ -21,6 +22,14 @@
         /// </summary>
         [ThreadStatic]
         private static IList<ILogger> threadChain;
+
+        /// <summary>
+        /// Construtor
+        /// </summary>
+        public DebugLogger()
+        {
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
+        }
 
         /// <summary>
         /// Indica se o logger está encadeado a outro logger
@@ -76,8 +85,8 @@
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("--------------------------------------------");
-            System.Diagnostics.Debug.WriteLine("[{0}] Exception: \r\n{1}", DateTime.Now, ex);
+            Trace.WriteLine("--------------------------------------------");
+            Trace.WriteLine(String.Format("[{0}] Exception: \r\n{1}", DateTime.Now, ex));
         }
 
         /// <summary>
@@ -126,8 +135,8 @@
                 }
             }
 
-            System.Diagnostics.Debug.WriteLine("--------------------------------------------");
-            System.Diagnostics.Debug.WriteLine("[{0}] Event: {1}\r\nDetails: {2}", DateTime.Now, @event, detail);
+            Trace.WriteLine("--------------------------------------------");
+            Trace.WriteLine(string.Format("[{0}] Event: {1}\r\nDetails: {2}", DateTime.Now, @event, detail));
         }
 
         /// <summary>

@@ -52,13 +52,14 @@
         /// <param name="localTtl">Tempo de vida do cache local em segundos </param>
         /// <param name="remoteTtl">Tempo de vida do cache remoto em segundos </param>
         /// <param name="slidingExpiration">Se o tempo de vida deve ser contado desde a última requisição do item no cache</param>
+        /// <param name="force">Força uso do cache mesmo quando este está desabilitado</param>
         /// <typeparam name="T">O tipo do objeto retornado do cache</typeparam>
         /// <returns>conteúdo do cache</returns>
-        public T GetLocalCache<T>(string key, bool fallbackCache = true, Delegates.RefreshCacheDelegate<T> refreshMethod = null, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false) where T : class
+        public T GetLocalCache<T>(string key, bool fallbackCache = true, Delegates.RefreshCacheDelegate<T> refreshMethod = null, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false, bool force = false) where T : class
         {
             T value = null;
 
-            if (ActiveCache.UseLocalCache)
+            if (ActiveCache.UseLocalCache || force)
             {
                 value = LocalClient.GetData(key) as T;
             }
@@ -70,11 +71,11 @@
                 {
                     value = this.GetRemote(key, refreshMethod, remoteTtl);
 
-                    this.StoreLocal(key, value, false, localTtl, remoteTtl, slidingExpiration);
+                    this.StoreLocal(key, value, false, localTtl, remoteTtl, slidingExpiration, force);
                 }
                 else if (refreshMethod != null)
                 {
-                    value = Refresh(key, refreshMethod, true, localTtl, remoteTtl, slidingExpiration);
+                    value = Refresh(key, refreshMethod, true, localTtl, remoteTtl, slidingExpiration, force);
                 }
             }
 
@@ -101,7 +102,7 @@
                 ttl = ttl ?? ActiveCache.CacheTime;
 
                 // Fazemos cache local de mesmo tempo do remoto
-                return Refresh(key, refreshMethod, false, ttl, ttl);
+                return Refresh(key, refreshMethod, storeLocal: false, localTtl: ttl, remoteTtl: ttl);
             }
 
             return value as T;
@@ -167,15 +168,16 @@
         /// <param name="localTtl">tempo de vida do cache local em segundos</param>
         /// <param name="remoteTtl">tempo de vida do cache remoto em segundos</param>
         /// <param name="slidingExpiration">Se a expiração do cache deve ser contada desde a última vez que o valor foi buscado</param>
+        /// <param name="force">Força uso do cache mesmo quando este está desabilitado</param>
         /// <typeparam name="T">O tipo do objeto do cache</typeparam>
-        public void StoreLocal<T>(string key, T value, bool storeFallback = true, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false) where T : class
+        public void StoreLocal<T>(string key, T value, bool storeFallback = true, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false, bool force = false) where T : class
         {
             if (storeFallback)
             {
                 this.StoreRemote(key, value, DateTime.Now.AddSeconds(remoteTtl ?? ActiveCache.CacheTime ?? localTtl ?? ActiveCache.LocalCacheTime));
             }
 
-            if (ActiveCache.UseLocalCache)
+            if (ActiveCache.UseLocalCache || force)
             {
                 var seconds = localTtl ?? ActiveCache.LocalCacheTime;
                 var expiration = slidingExpiration ? (ICacheItemExpiration)new SlidingTime(new TimeSpan(0, 0, 0, seconds)) : new AbsoluteTime(DateTime.Now.AddSeconds(seconds));
@@ -218,10 +220,8 @@
         /// <param name="removeFallback">indica se o conteúdo também deve ser removido do cache de fallback</param>
         public void RemoveLocal(string key, bool removeFallback = true)
         {
-            if (ActiveCache.UseLocalCache)
-            {
-                LocalClient.Remove(key);
-            }
+            // não precisa checar se UseLocal..
+            LocalClient.Remove(key);
 
             if (removeFallback)
             {
@@ -295,9 +295,10 @@
         /// <param name="localTtl">tempo de vida do cache local em segundos</param>
         /// <param name="remoteTtl">tempo de vida do cache remoto em segundos</param>
         /// <param name="slidingExpiration"> se o tempo de expiração é calculado a partir da ultima vez que o objeto foi recuperado do cache</param>
+        /// <param name="force">Força uso do cache mesmo quando este está desabilitado</param>
         /// <typeparam name="T">O tipo do objeto do cache</typeparam>
         /// <returns>conteúdo a ser armazenado em cache</returns>
-        private static T Refresh<T>(string key, Delegates.RefreshCacheDelegate<T> refreshMethod, bool storeLocal = false, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false) where T : class
+        private static T Refresh<T>(string key, Delegates.RefreshCacheDelegate<T> refreshMethod, bool storeLocal = false, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false, bool force = false) where T : class
         {
             var locker = KeysRefreshing.GetOrAdd(key, s => new object());
             lock (locker)
@@ -307,7 +308,7 @@
                 // Verifica se o valor foi armazenado em cache após o lock
                 if (storeLocal)
                 {
-                    if (ActiveCache.UseLocalCache)
+                    if (ActiveCache.UseLocalCache || force)
                     {
                         value = LocalClient.GetData(key) as T;
                     }
@@ -333,7 +334,7 @@
                 // armazena dado em cache
                 if (storeLocal)
                 {
-                    if (ActiveCache.UseLocalCache)
+                    if (ActiveCache.UseLocalCache || force)
                     {
                         localTtl = localTtl ?? ActiveCache.LocalCacheTime;
                         var expiration = slidingExpiration

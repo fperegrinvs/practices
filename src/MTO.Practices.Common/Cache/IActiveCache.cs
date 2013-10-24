@@ -17,9 +17,10 @@
         /// <param name="localTtl">Tempo de vida do cache local em segundos </param>
         /// <param name="remoteTtl">Tempo de vida do cache remoto em segundos </param>
         /// <param name="slidingExpiration">Se o tempo de vida deve ser contado desde a última requisição do item no cache</param>
+        /// <param name="force">Força uso do cache mesmo quando este está desabilitado</param>
         /// <typeparam name="T">O tipo do objeto retornado do cache</typeparam>
         /// <returns>conteúdo do cache</returns>
-        T GetLocalCache<T>(string key, bool fallbackCache = true, Delegates.RefreshCacheDelegate<T> refreshMethod = null, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false) where T : class;
+        T GetLocalCache<T>(string key, bool fallbackCache = true, Delegates.RefreshCacheDelegate<T> refreshMethod = null, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false, bool force = false) where T : class;
 
         /// <summary>
         /// Recupera dado do cache remoto
@@ -82,8 +83,9 @@
         /// <param name="localTtl">tempo de vida do cache local em segundos</param>
         /// <param name="remoteTtl">tempo de vida do cache remoto em segundos</param>
         /// <param name="slidingExpiration">Se a expiração do cache deve ser contada desde a última vez que o valor foi buscado</param>
+        /// <param name="force">Força uso do cache mesmo quando este está desabilitado</param>
         /// <typeparam name="T">O tipo do objeto do cache</typeparam>
-        void StoreLocal<T>(string key, T value, bool storeFallback = true, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false) where T : class;
+        void StoreLocal<T>(string key, T value, bool storeFallback = true, int? localTtl = null, int? remoteTtl = null, bool slidingExpiration = false, bool force = false) where T : class;
 
         /// <summary>
         /// Armazena dado em cache distribuido

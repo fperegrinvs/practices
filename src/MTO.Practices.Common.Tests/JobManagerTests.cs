@@ -5,9 +5,13 @@
     using System.Linq;
     using System.Threading;
 
+    using MTO.Practices.Common.Funq;
     using MTO.Practices.Common.JobManager;
 
     using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+    using MTO.Practices.Common.Logging;
+    using MTO.Practices.Common.Unity;
 
     [TestClass]
     public class JobManagerTests
