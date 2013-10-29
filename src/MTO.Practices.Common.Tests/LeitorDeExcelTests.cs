@@ -22,6 +22,7 @@ namespace MTO.Practices.Common.Tests
         private readonly LeitorDeExcel excel;
 
         [TestMethod]
+        [TestCategory("Manual")]
         public void SalvarPlanilhaSemNomeDeCampos()
         {
             excel.SalvarPastaDeTrabalho(ds, @"C:\temp\testeExcelSemNomeDeCampos.xlsx", false);
@@ -29,6 +30,7 @@ namespace MTO.Practices.Common.Tests
         }
 
         [TestMethod]
+        [TestCategory("Manual")]
         public void SalvarPlanilhaComNomeDeCampos()
         {
             excel.SalvarPastaDeTrabalho(ds, @"C:\temp\testeExcelComNomeDeCampos.xlsx", true);
