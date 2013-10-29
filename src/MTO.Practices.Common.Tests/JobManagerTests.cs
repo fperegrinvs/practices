@@ -27,10 +27,7 @@
             var job = JobManager.Instance.FindJob(id);
             Assert.IsFalse(job.Done);
 
-            for (int i = 0; i < 10000000; i++)
-            {
-                var j = i;
-            }
+            Thread.Sleep(15);
 
             Assert.IsTrue(job.Done);
         }
@@ -46,10 +43,7 @@
             var job = JobManager.Instance.FindJob(id);
             Assert.IsFalse(job.Done);
 
-            for (int i = 0; i < 10000000; i++)
-            {
-                var j = i;
-            }
+            Thread.Sleep(15);
 
             Assert.IsTrue(job.Done);
             Assert.AreEqual(10000, job.Result);
@@ -192,18 +186,12 @@
 
         private void OnOperacao()
         {
-            for (int i = 0; i < 900000; i++)
-            {
-                var j = i;
-            }
+            Thread.Sleep(10);
         }
 
         private int OnOperacaoFuncao1(int numero)
         {
-            for (int i = 0; i < 100000; i++)
-            {
-                var j = i;
-            }
+            Thread.Sleep(10);
 
             return numero * 100;
         }
